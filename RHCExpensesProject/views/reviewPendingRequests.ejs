@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Review Material Requests</title>
+    <link rel="stylesheet" type="text/css" href="/css/logout.css" />
+    <link rel="stylesheet" type="text/css" href="/css/alterRequests.css" />
+    <link rel="shortcut icon" href="../graphics/favicon.ico" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/scripts/reviewPendingRequests.js"></script>
+</head>
+<body>
+
+    <h2>Review Material Requests</h2><br />
+
+    <div class="pendingRequestsTable" style="overflow-x:auto;">
+
+        <% if(result.length == 0) { %>
+        <table>
+            <tr>No pending requests found.</tr>
+        </table>
+        <% } else { %>
+        <div class="sidePanelWrapper">
+            <table class="fixedHeader" cellpadding="0" cellspacing="1">
+                <thead>
+                    <tr>
+                        <th>Material Number</th>
+                        <th>Description</th>
+                        <th>Comment</th>
+                        <th>Quantity Required</th>
+                        <th>Uom</th>
+                        <th>Batch Number</th>
+                        <th>Quantity Issued</th>
+                        <th>Source Location</th>
+                        <th>Destination Location</th>
+                        <th>Transaction #</th>
+                        <th>Thaw Required</th>
+                        <th>Refreeze Date</th>
+                        <th>Requester</th>
+                        <th>Requested Time</th>
+                        <th>Date Required</th>
+                        <th>Approving Manager</th>
+                        <th>Manager Approved Time</th>
+                        <th>Approving Planner</th>
+                        <th>Planning Approved Time</th>
+                        <th>Material Issuer</th>
+                        <th>Material Issued Time</th>
+                        <th>Request Altered By</th>
+                        <th>Request Altered Time</th>
+                        <th>Update/Accept</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <% for(var i = 0; i < result.length; i++) { %>
+                    <tr>
+                        <% var editable = true; %>
+
+                        <% for (var property in result[i]) { %>
+                        <% if(property == 'requester') { %>
+                        <% editable = false; %>
+                        <% } %>
+
+                        <% if(editable) { %>
+
+                        <td><input class="textInput" type="text" value="<%= result[i][property]; %>" /></td>
+                        <% } else { %>
+
+                        <td><%=result[i][property];%></td>
+                        <% } %>
+                        <% } %>
+
+                        <td class="editRow">
+                            <input class="submitBtn" type="submit" value="Update" /><br />
+                            <input class="deleteChkbox" type="checkbox" name="delete" value="1" /><label>Delete</label>
+                        </td>
+                    </tr>
+                    <% } %>
+
+                </tbody>
+
+            </table>
+        </div>
+        <% } %>
+
+    </div>
+
+    <a class="logoutLink" href="http://localhost:8080/logout">Logout</a>
+
+</body>
+</html>

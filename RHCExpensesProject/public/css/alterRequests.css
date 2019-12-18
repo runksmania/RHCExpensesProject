@@ -1,0 +1,86 @@
+﻿body {
+    font-family: Helli, sans-serif;
+    font-size: 12px;
+    line-height: 14px;
+}
+
+h2 {
+    text-align: center;
+}
+
+.sidePanelWrapper {
+    color: #000;
+    border-radius: 30px;
+    -webkit-box-shadow: 0px 0px 5px #333, 0px 0px 0px #000, 0px 0px 5px #333, 0px 0px 0px #000;
+    box-shadow: 0px 0px 5px #333, 0px 0px 0px #000, 0px 0px 5px #333, 0px 0px 0px #000;
+    border: 1px solid black;
+    background-color: white;
+    background-image: -webkit-gradient( linear, left bottom, left top, color-stop(-0.0, #C6C6C6), color-stop(0.8, #E1E1E1), color-stop(1.0, #F8F8F8));
+    z-index: 1;
+    display: table;
+    position: relative;
+    padding: 15px;
+}
+
+.fixedHeader {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+th {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.fixedHeader thead {
+    display: table-header-group;
+    position:relative;
+}
+
+tbody td {
+    width: 1%;
+    text-wrap: none;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+tbody tr:nth-child(odd){
+    background-color: white;
+}
+
+.deleteChkbox {
+    margin: 10px 0px 0px 0px;
+    padding: 0;
+    display: inline-block;
+}
+
+label {
+    margin: 0px 0px 0px 5px;
+    padding: 0;
+    display: inline-block;
+}
+
+.editRow{
+    text-wrap: none;
+    text-align: center;
+}
+
+.submitBtn {
+    background-color: #CCC;
+    background-image: -webkit-gradient( linear, left bottom, left top, color-stop(0, rgb(133,133,133)), color-stop(0.5, rgb(189,189,189)), color-stop(0.88, rgb(255,255,255)));
+    border-radius: 20px;
+    border: 2px solid #FFF;
+    -webkit-box-shadow: 0px 0px 4px #000, 0px 0px 4px #000;
+    padding-left: 3px;
+    padding-right: 3px;
+    margin: 6px 0;
+    cursor: pointer;
+}
+
+.textInput{
+    width: 50px;
+}
+
+input {
+    font: 400 13.3333px Arial;
+}

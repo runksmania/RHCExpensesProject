@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Creation</title>
+    <link rel="stylesheet" type="text/css" href="/css/addNewUser.css" />
+    <link rel="shortcut icon" href="/graphics/favicon.ico" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/scripts/addNewUser.js"></script>
+</head>
+<body>
+    <div class="contentWrapper">
+        <div class="content">
+
+            <div class="createForm">
+                <img class="bioRadLogo" src="/graphics/biorad_logo.gif" />
+                <h1>User Creation</h1>
+                <form action="/main/admin/addNewUser" method="post" autocomplete="off">
+                    <input type="text" name="username" placeholder="Enter Username" autofocus required />
+                    <p></p>
+
+                    <input type="text" name="name" placeholder="Enter Individuals Name" required />
+                    <p></p>
+
+                    <input type="email" name="email" placeholder="Enter Email" />
+                    <p></p>
+
+                    <input class="pass" type="password" name="password" placeholder="Enter Password" required />
+                    <p></p>
+                    <input class="passConfirm" type="password" placeholder="Re-enter Password" required />
+                    <p></p>
+
+                    <label>Access Permisions</label>
+                    <select name="accessToken" required>
+                        <option value="" disabled selected="selected">Select one--</option>
+                        <option value="1">Administrator Privileges</option>
+                        <option value="2">Manager Privileges</option>
+                        <option value="3">Planning Privileges</option>
+                        <option value="4">Request Fullfiller Privileges</option>
+                        <option value="5">Requestor Privileges</option>
+                    </select>
+                    <p></p>
+
+                    <input class="submit" type="submit" name="loginBtn" value="Create User" />
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <a class="logoutLink" href="http://localhost:8080/logout">Logout</a>
+
+</body>
+</html>
