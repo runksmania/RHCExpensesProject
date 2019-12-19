@@ -3,7 +3,7 @@
 /**
  * Import Classes.
  */
-//const databaseHandler = require('./private/DatabaseHandler');
+const databaseHandler = require('./private/DatabaseHandler');
 const logger = require('./private/logger');
 const Constants = require('./private/Constants');
 //const Mailer = require('./private/mailer');
@@ -12,7 +12,7 @@ const Constants = require('./private/Constants');
 * Instantiate Classes.
 */
 const constants = new Constants();
-//const dbhandler = new databaseHandler();
+const dbhandler = new databaseHandler();
 //const mailer = new Mailer();
 
 /**

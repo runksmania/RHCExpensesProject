@@ -3,7 +3,7 @@
 /**
  * Module Dependencies.
  */
-const mysql = require('mysql2');
+const {Pool, Client} = require('pg');
 const crypto = require('crypto');
 const logger = require('../private/logger');
 const User = require('../private/User');
@@ -12,19 +12,17 @@ module.exports = class DatabaseHandler
 {
     constructor()
     {
-        this.pool = mysql.createPool(
+        this.pool = new Pool(
             {
                 host: 'localhost',
-                user: 'root',
-                database: 'material_requestdb',
-                password: '$HCXio?K]m.a:jmhEW2',
-                waitForConnections: true,
-                connectionLimit: 10,
-                queueLimit: 0
+                user: 'postgres',
+                database: 'testdb',
+                password: '#GXZui?J]m.a:',
+                port: 5432
             });
 
         //Grab connection to make sure database is connected
-        this.pool.getConnection(function (err, conn) 
+        this.pool.query('SELECT NOW()', (err, res) =>
         {
             if (err)
             {
@@ -35,8 +33,6 @@ module.exports = class DatabaseHandler
                 logger.info('Connected to database successfully.');
             }
 
-            conn.release();
-
         });
     }
 
@@ -44,7 +40,7 @@ module.exports = class DatabaseHandler
     attemptLogin(username, pass, done)
     {
 
-        this.pool.query('SELECT * FROM user WHERE username = ?', [username], function (err, result)
+        this.pool.query('SELECT * FROM users WHERE username = $1', [username], function (err, result)
         {
             var user = new User();
 
@@ -62,6 +58,8 @@ module.exports = class DatabaseHandler
             else
             {
                 //Check login credentials, against database.
+                result = result.rows
+                logger.info(result)
                 user.id = result[0].iduser;
                 user.username = result[0].username;
                 user.name = result[0].name;
@@ -71,7 +69,7 @@ module.exports = class DatabaseHandler
                 function hashPassword(pass)
                 {
                     pass = crypto.createHmac('sha512', pass)
-                        .update(result[0].salt)
+                        .update(result[0].user_salt)
                         .digest('hex');
 
                     return pass;
@@ -79,7 +77,7 @@ module.exports = class DatabaseHandler
 
                 var hashPass = hashPassword(pass);
 
-                if (hashPass != result[0].password)
+                if (hashPass != result[0].user_pass)
                 {
                     //Login results failed, set user null to show failed login upon returning.
                     user = null;
