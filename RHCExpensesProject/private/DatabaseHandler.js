@@ -16,8 +16,8 @@ module.exports = class DatabaseHandler
             {
                 host: 'localhost',
                 user: 'postgres',
-                database: 'testdb',
-                password: '#GXZui?J]m.a:',
+                database: 'rhc',
+                password: '$RHCweb',
                 port: 5432
             });
 
@@ -40,7 +40,7 @@ module.exports = class DatabaseHandler
     attemptLogin(username, pass, done)
     {
 
-        this.pool.query('SELECT * FROM users WHERE username = $1', [username], function (err, result)
+        this.pool.query('SELECT * FROM emp WHERE username = $1', [username], function (err, result)
         {
             var user = new User();
 
@@ -60,7 +60,7 @@ module.exports = class DatabaseHandler
                 //Check login credentials, against database.
                 result = result.rows
                 logger.info(result)
-                user.id = result[0].iduser;
+                user.id = result[0].emp_num;
                 user.username = result[0].username;
                 user.name = result[0].name;
                 user.email = result[0].email;
@@ -77,7 +77,7 @@ module.exports = class DatabaseHandler
 
                 var hashPass = hashPassword(pass);
 
-                if (hashPass != result[0].user_pass)
+                if (hashPass != result[0].pass)
                 {
                     //Login results failed, set user null to show failed login upon returning.
                     user = null;
@@ -108,7 +108,7 @@ module.exports = class DatabaseHandler
         var hashPass = hashPassword(pass);
 
         //Set up parameterized query.
-        var queryString = 'INSERT INTO user'
+        var queryString = 'INSERT INTO emp'
             + '(username, name, email, password, salt, access_token)\n'
             + 'VALUES\n'
             + '(?,?,?,?,?,?);';
