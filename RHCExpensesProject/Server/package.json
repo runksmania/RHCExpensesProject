@@ -1,0 +1,29 @@
+{
+  "name": "rhc_expenses_project",
+  "version": "0.0.1",
+  "description": "A project to track expenses at RHC",
+  "main": "app.js",
+  "dependencies": {
+    "connect-flash": "^0.1.1",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "express-session": "^1.17.0",
+    "express-validator": "^6.3.0",
+    "log4js": "^6.1.0",
+    "pg": "^7.15.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/runksmania/RHCExpensesProject.git"
+  },
+  "author": "Michael Cottrell <mcottrell@redwoodhotelcasino.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/runksmania/RHCExpensesProject/issues"
+  },
+  "homepage": "https://github.com/runksmania/RHCExpensesProject#readme"
+}

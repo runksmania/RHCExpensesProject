@@ -1,0 +1,84 @@
+﻿body {
+    color: black;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    box-sizing: border-box;
+    padding: 70px;
+    background: url(../graphics/bioRadBackground.jpg) repeat-x #b8b6b7;
+    font-family: Arial, sans-serif;
+}
+
+.contentWrapper {
+    color: #000;
+    border-radius: 30px;
+    -webkit-box-shadow: 0px 0px 5px #333, 0px 0px 0px #000, 0px 0px 5px #333, 0px 0px 0px #000;
+    box-shadow: 0px 0px 5px #333, 0px 0px 0px #000, 0px 0px 5px #333, 0px 0px 0px #000;
+    border: 1px solid black;
+    background-color: white;
+    background-image: -webkit-gradient( linear, left bottom, left top, color-stop(-0.0, #C6C6C6), color-stop(0.8, #E1E1E1), color-stop(1.0, #F8F8F8));
+    z-index: 1;
+    display: table;
+    position: relative;
+    padding: 15px;
+}
+
+.contentBackground {
+    width: 700px;
+    height: 200px;
+    border-radius: 30px;
+    background: white;
+}
+
+.content {
+    background: url(../graphics/seo-404page-newimage.jpg) no-repeat;
+    height: 200px;
+}
+
+h3 {
+    float: right;
+    margin: 0;
+    padding: 0;
+    color: #666;
+    font-size: 21px;
+    font-weight: 400;
+    font-family: Arial,sans-serif;
+    line-height: 26px;
+}
+
+h3:after{
+    clear: both;
+    content: "";
+    display: table;
+}
+
+p {
+    float: right;
+    width: 350px;
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+    font-family: Arial,sans-serif;
+    line-height: 20px;
+    word-wrap: break-word;
+}
+
+p:after{
+    clear: both;
+    content: "";
+    display: table;
+}
+
+input[type="submit"] {
+    background: linear-gradient(to bottom,rgba(28,169,28,1) 0,rgba(5,95,5,1) 100%);
+    color: #fff;
+    padding: 5px 10px;
+    width: 70px;
+    margin-top: 20px;
+    text-indent: 0px;
+}
+
+input[type="submit"]:hover {
+    cursor: pointer;
+}

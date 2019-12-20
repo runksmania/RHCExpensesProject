@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Forgot Credentials</title>
+    <link rel="stylesheet" type="text/css" href="/css/login.css" />
+    <link rel="shortcut icon" href="../graphics/favicon.ico" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+ <body>
+     <div class="contentWrapper">
+         <div class="content">
+             
+             <img class="bioRadLogo" src="../graphics/biorad_logo.gif"/>
+             
+             <div class="loginForm">
+             
+                 <% if(forgot === 'username') { %>  
+                 <form action="/forgot=username" method="post" autocomplete="off">
+                     <h2>Forgot Username</h2>
+                     <p>Enter the email address registered to your username.</p>
+                     <input class="emailInput" type="text" name="email" placeholder="Enter Email" autofocus required />
+                     <a href="http://localhost:8080/password=forgot">Lost Password?</a><br /><br />
+                     <input type="submit" name="getUsernameBtn" value="Submit" />
+                     <br />
+                 </form>
+                 <% } else { %>
+                 <form action="/forgot=password" method="post" autocomplete="off">
+                     <h2>Forgot Password</h2>
+                     <p>Enter your username.</p>
+                     <input class="usernameInput" type="text" name="username" placeholder="Username" autofocus required />
+                     <a href="http://localhost:8080/username=forgot">Forgot Username?</a><br /><br />
+                     <input type="submit" name="loginBtn" value="Submit" />
+                     <br />
+                 </form>
+                 <% } %>
+
+             </div>
+         </div>
+     </div>
+</body>
+</html>

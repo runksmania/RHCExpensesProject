@@ -1,0 +1,34 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Materials Request Login</title>
+    <link rel="stylesheet" type="text/css" href="/css/login.css" />
+    <link rel="shortcut icon" href="../graphics/favicon.ico" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/scripts/login.js"></script>
+</head>
+ <body>
+     <div class="contentWrapper">
+         <div class="content">
+             
+             <img class="bioRadLogo" src="../graphics/rhc_logo_color.png" height="25%" width="25%"/>
+             <h1>Materials Request Login</h1>
+             
+             <div class="loginForm">
+             
+                 <form action="/login" method="post" autocomplete="off">
+                     <h2>Sign In</h2>
+                     <input class="usernameInput" type="text" name="username" placeholder="Username" autofocus required />
+                     <a href="http://localhost:8080/username=forgot">Forgot Username?</a><br /><br />
+                     <input class="passwordInput" type="password" name="password" placeholder="Password" required />
+                     <p style="display:none" class="capsOn">Caps Lock is on.</p>
+                     <a href="http://localhost:8080/password=forgot">Lost Password?</a><br /><br />
+                     <input type="submit" name="loginBtn" value="Sign in" />
+                     <br />
+                 </form>
+
+             </div>
+         </div>
+     </div>
+</body>
+</html>
