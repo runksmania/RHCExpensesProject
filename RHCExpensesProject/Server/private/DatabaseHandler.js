@@ -40,7 +40,7 @@ module.exports = class DatabaseHandler
     attemptLogin(username, pass, done)
     {
 
-        this.pool.query('SELECT * FROM users WHERE username = $1', [username], function (err, result)
+        this.pool.query('SELECT * FROM emp WHERE username = $1', [username], function (err, result)
         {
             var user = new User();
 
@@ -69,7 +69,7 @@ module.exports = class DatabaseHandler
                 function hashPassword(pass)
                 {
                     pass = crypto.createHmac('sha512', pass)
-                        .update(result[0].user_salt)
+                        .update(result[0].salt)
                         .digest('hex');
 
                     return pass;
@@ -77,7 +77,7 @@ module.exports = class DatabaseHandler
 
                 var hashPass = hashPassword(pass);
 
-                if (hashPass != result[0].user_pass)
+                if (hashPass != result[0].pass)
                 {
                     //Login results failed, set user null to show failed login upon returning.
                     user = null;
