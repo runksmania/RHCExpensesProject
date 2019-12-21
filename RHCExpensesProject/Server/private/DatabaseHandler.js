@@ -43,6 +43,7 @@ module.exports = class DatabaseHandler
         this.pool.query('SELECT * FROM emp WHERE username = $1', [username], function (err, result)
         {
             var user = new User();
+            result = result.rows
 
             if (err)
             {
@@ -58,8 +59,6 @@ module.exports = class DatabaseHandler
             else
             {
                 //Check login credentials, against database.
-                result = result.rows
-                logger.info(result)
                 user.id = result[0].iduser;
                 user.username = result[0].username;
                 user.name = result[0].name;

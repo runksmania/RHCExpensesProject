@@ -22,8 +22,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const path = require('path');
 const session = require('express-session');
-const { body } = require('express-validator/check');
-const { sanitizeBody } = require('express-validator/filter');
+const { body } = require('express-validator');
+const { sanitizeBody } = require('express-validator');
 var flash = require('connect-flash');
 
 /**
@@ -135,6 +135,11 @@ app.get('/main/viewPendingRequests', (req, res) =>
             if (err)
             {
                 logger.error(err);
+                var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
+                    + ' should this issue persist.';
+                req.flash('info', 'requestError');
+                req.flash('requestError', flashMessage);
+                res.redirect('/');
             }
             else
             {
@@ -189,6 +194,11 @@ app.get('/main/alterRequests', (req, res) =>
             if (err)
             {
                 logger.error(err);
+                var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
+                    + ' should this issue persist.';
+                req.flash('info', 'requestError');
+                req.flash('requestError', flashMessage);
+                res.redirect('/');
             }
             else
             {
@@ -243,6 +253,11 @@ app.get('/main/reviewPendingRequests', (req, res) =>
             if (err)
             {
                 logger.error(err);
+                var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
+                    + ' should this issue persist.';
+                req.flash('info', 'requestError');
+                req.flash('requestError', flashMessage);
+                res.redirect('/');
             }
             else
             {
@@ -303,7 +318,11 @@ app.get('/main/recentRequests', (req, res) =>
             if (err)
             {
                 logger.error(err);
-                throw err;
+                var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
+                    + ' should this issue persist.';
+                req.flash('info', 'requestError');
+                req.flash('requestError', flashMessage);
+                res.redirect('/');
             }
             else
             {
@@ -480,6 +499,11 @@ app.post('/login', [body('username').trim().escape()], (req, res) =>
         if (err)
         {
             logger.error(err);
+            var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
+                + ' should this issue persist.';
+            req.flash('info', 'requestError');
+            req.flash('requestError', flashMessage);
+            res.redirect('/');
         }
         else 
         {
@@ -548,6 +572,11 @@ app.post('/main/requestMaterials',
                 if (err)
                 {
                     logger.error(err);
+                    var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
+                        + ' should this issue persist.';
+                    req.flash('info', 'requestError');
+                    req.flash('requestError', flashMessage);
+                    res.redirect('/');
                 }
                 else
                 {
@@ -583,6 +612,11 @@ app.post('/main/alterRequests/?*',
             if (err)
             {
                 logger.error(err);
+                var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
+                    + ' should this issue persist.';
+                req.flash('info', 'requestError');
+                req.flash('requestError', flashMessage);
+                res.redirect('/');
             }
             else
             {
@@ -634,7 +668,11 @@ app.post('/main/admin/addNewUser', (req, res) =>
         if (err)
         {
             logger.error(err);
-            throw err;
+            var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
+                + ' should this issue persist.';
+            req.flash('info', 'requestError');
+            req.flash('requestError', flashMessage);
+            res.redirect('/');
         }
         else
         {
@@ -653,6 +691,11 @@ app.post('/pasword=forgot*', [body('username').trim().escape()], (req, res) =>
         if (err)
         {
             logger.error(err);
+            var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
+                + ' should this issue persist.';
+            req.flash('info', 'requestError');
+            req.flash('requestError', flashMessage);
+            res.redirect('/');
         }
         else
         {
@@ -671,6 +714,11 @@ app.post('/username=forgot*', [body('email').trim().escape], (req, res) =>
         if (err)
         {
             logger.error(err);
+            var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
+                + ' should this issue persist.';
+            req.flash('info', 'requestError');
+            req.flash('requestError', flashMessage);
+            res.redirect('/');
         }
         else
         {
