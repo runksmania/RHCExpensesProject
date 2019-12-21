@@ -12,15 +12,21 @@
         <div class="content">
 
             <div class="createForm">
-                <img class="bioRadLogo" src="/graphics/biorad_logo.gif" />
+                <img class="bioRadLogo" src="/graphics/rhc_logo_color.png" width="25%" height="25%"/>
                 <h1>User Creation</h1>
                 <form action="/main/admin/addNewUser" method="post" autocomplete="off">
-                    <input type="text" name="username" placeholder="Enter Username" autofocus required />
+                    <input type="text" name="emp_id" placeholder="Enter Employee Id#" autofocus required />
+                    <p></p>
+                    
+                    <input type="text" name="username" placeholder="Enter Username" required />
                     <p></p>
 
-                    <input type="text" name="name" placeholder="Enter Individuals Name" required />
+                    <input type="text" name="fname" placeholder="Enter Individuals First Name" required />
                     <p></p>
 
+                    <input type="text" name="lname" placeholder="Enter Individuals Last Name" required />
+                    <p></p>
+                    
                     <input type="email" name="email" placeholder="Enter Email" />
                     <p></p>
 
@@ -34,9 +40,7 @@
                         <option value="" disabled selected="selected">Select one--</option>
                         <option value="1">Administrator Privileges</option>
                         <option value="2">Manager Privileges</option>
-                        <option value="3">Planning Privileges</option>
-                        <option value="4">Request Fullfiller Privileges</option>
-                        <option value="5">Requestor Privileges</option>
+                        <option value="3">Accountant Privileges</option>
                     </select>
                     <p></p>
 

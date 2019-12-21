@@ -79,6 +79,12 @@ app.get('/', (req, res) =>
         var message = req.flash(flash);
         req.session.flash = null;
         logger.info(message);
+
+        if(req.session.user)
+        {
+            logger.info(req.session.user.username)
+        }
+
         res.render('flash', { flashTitle: flash.toString(), flashMessage: message.toString() });
     }
     else if (req.session && req.session.user)
@@ -663,7 +669,10 @@ app.post('/main/admin/addNewUser', (req, res) =>
         }
     }
 
-    dbhandler.addNewUser(req.body.username, req.body.name, req.body.email, req.body.password, req.body.accessToken, function (err, bool)
+    logger.info(req.body)
+
+    dbhandler.addNewUser(req.body.emp_id, req.body.username, req.body.fname, req.body.lname, req.body.email,
+        req.body.password, req.body.accessToken, function (err, bool)
     {
         if (err)
         {
@@ -676,7 +685,7 @@ app.post('/main/admin/addNewUser', (req, res) =>
         }
         else
         {
-            var flashMessage = 'User account was successfully created for user: ' + req.body.name;
+            var flashMessage = 'User account was successfully created for user: ' + req.body.fname + ' ' +req.body.lname;
             req.flash('info', 'addSuccess');
             req.flash('addSuccess', flashMessage);
             res.redirect('/');

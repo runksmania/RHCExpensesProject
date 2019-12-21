@@ -1,3 +1,8 @@
+/* RHC Expenses Project Database Default GL Code Population File
+   Last modified: 12-21-19
+   Author: Michael Cottrell
+*/
+
 delete from gl_codes
 
 insert into gl_codes

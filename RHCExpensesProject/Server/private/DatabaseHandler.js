@@ -61,7 +61,7 @@ module.exports = class DatabaseHandler
                 //Check login credentials, against database.
                 user.id = result[0].iduser;
                 user.username = result[0].username;
-                user.name = result[0].name;
+                user.name = result[0].fname + ' ' + result[0].lname;
                 user.email = result[0].email;
                 user.accessToken = result[0].access_token;
 
@@ -91,7 +91,7 @@ module.exports = class DatabaseHandler
     }
 
     //This function adds a new user into the database.
-    addNewUser(username, name, email, pass, accessToken, done)
+    addNewUser(emp_id, username, fname, lname, email, pass, accessToken, done)
     {
         var salt = crypto.randomBytes(20).toString('hex');
 
@@ -107,12 +107,12 @@ module.exports = class DatabaseHandler
         var hashPass = hashPassword(pass);
 
         //Set up parameterized query.
-        var queryString = 'INSERT INTO user'
-            + '(username, name, email, password, salt, access_token)\n'
+        var queryString = 'INSERT INTO emp\n'
             + 'VALUES\n'
-            + '(?,?,?,?,?,?);';
+            + '($1,$2,$3,$4,$5,$6,$7,$8);';
 
-        var query = this.pool.query(queryString, [username, name, email, hashPass, salt, accessToken], function (err, result)
+        var query = this.pool.query(queryString, [emp_id, username, fname, lname, 
+            salt, hashPass, email, accessToken], function (err, result)
         {
             if (!err)
             {

@@ -1,0 +1,46 @@
+Michael Cottrell
+CS 325 - Fall 2019
+Last modified: 11-15-19
+
+	Vendor Entity Class:
+
+vendor(VENDOR_ID, VENDOR_NAME, VENDOR_ADDRESS, vendor_city, vendor_state, vendor_zip)
+
+vendor_phones(VENDOR_ID, VENDOR_PHONE, phone_type)
+	foreign key (VENDOR_ID) references (vendor)
+
+contact(CONTACT_ID, CONTACT_FNAME, CONTACT_LNAME, CONTACT_EMAIL, VENDOR_ID)
+	foreign key (VENDOR_ID) references (vendor)
+
+contact_phone(CONTACT_ID, CONTACT_PHONE, phone_type, phone_ext)
+	foreign key (CONTACT_ID) references (contact)
+
+	Items Entity Class:
+
+item(ITEM_NUM, ITEM_NAME, VENDOR_ID, item_price, item_desc, min_quan, max_quan)
+	foreign key  (vendor_id) references vendor(vendor_id)
+
+	General Ledger Codes Entity Class:
+
+general_ledger_codes(CODE_NUM, code_name, code_desc)
+
+	Dept Entity Class:
+
+dept(DEPT_NUM, dept_name)
+
+	Employee Entity Class:
+
+empl(EMP_ID, emp_fname, emp_lname, dept_num, auth_level)
+	foreign key (dept_num) references dept (dept_num)
+
+empl_phone(EMP_ID, PHONE_NUM, phone_type, phone_ext)
+	foreign key (emp_id) references empl (emp_id)
+
+	Purchase Orders Entity Class:
+
+purchase_order(PO_NUM, gen_ledge_code, total_amount, req_id, approver_id, vend_id, req_date,
+	purch_date, receive_date, receiver_id, invoice_num, paid_date)
+	foreign key (GEN_LEDGE_CODE) references (general_ledger_codes)
+
+items_purchased(PO_NUM, ITEM_NUM, quantity, total)
+	foreign key PO_NUM references (purchase_order)
