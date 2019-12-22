@@ -1,0 +1,21 @@
+Department Number,Department Name
+00,Admin
+01,Slots
+20,Hotel
+23,Housekeeping
+25,Gift Shop
+30,Restaurant
+41,Marketing
+42,Players Club
+50,Human Resources
+61,Facilities
+65,Wastewater
+70,Security
+75,Surveillance
+80,Cage
+82,Accounting/Finance
+90,IT
+91,Admin Employee
+92,Miscellaneous
+95,Visitor Center
+99,Error

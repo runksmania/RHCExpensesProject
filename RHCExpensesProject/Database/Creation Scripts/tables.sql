@@ -1,5 +1,5 @@
 /* RHC Expenses Project Database Table Creation File
-   Last modified: 12-21-19
+   Last modified: 12-22-19
    Author: Michael Cottrell
 */
 
@@ -68,7 +68,7 @@ DROP TABLE IF EXISTS dept CASCADE;
 
 create TABLE dept
 (
-    dept_num    char(2) PRIMARY KEY,
+    dept_num    CHAR(2) PRIMARY KEY,
     dept_name   VARCHAR(20)
 );
 
@@ -76,18 +76,11 @@ DROP TABLE IF EXISTS gl_codes CASCADE;
 
 create TABLE gl_codes
 (
-    gl_num     CHAR(5) PRIMARY KEY,
-    gl_name    VARCHAR(50) NOT NULL,
-    posting_type VARCHAR(100) NOT NULL
-);
-
-DROP TABLE IF EXISTS dept_gl_intersect;
-
-CREATE TABLE dept_gl_intersect
-(
-    dept_num CHAR(2) REFERENCES dept,
-    gl_num   CHAR(5) REFERENCES gl_codes,
-    PRIMARY KEY (dept_num, gl_num)  
+    dept_num     CHAR(2) REFERENCES dept,
+    gl_num       CHAR(5),
+    gl_name      VARCHAR(50) NOT NULL,
+    posting_type VARCHAR(100) NOT NULL,
+    PRIMARY KEY  (dept_num, gl_num)
 );
 
 DROP TABLE IF EXISTS emp CASCADE;
@@ -120,19 +113,20 @@ DROP TABLE IF EXISTS purchase_order CASCADE;
 
 create TABLE purchase_order
 (
-    po_num         SERIAL PRIMARY KEY,
-    dept_num       CHAR(2) REFERENCES dept,
-    gen_ledge_code CHAR(5) REFERENCES gl_codes, 
-    total_amount   MONEY,
-    req_id         VARCHAR(4) REFERENCES emp,
-    approver_id    VARCHAR(4) REFERENCES emp,
-    vend_id        INTEGER,
-    req_date       DATE,
-    purch_date     DATE,
-    receive_date   DATE,
-    receiver_id    VARCHAR(4) REFERENCES emp,
-    invoice_num    VARCHAR(20),
-    paid_date      DATE
+    po_num       SERIAL PRIMARY KEY,
+    dept_num     CHAR(2),
+    gl_code      CHAR(5), 
+    total_amount MONEY,
+    req_id       VARCHAR(4) REFERENCES emp,
+    approver_id  VARCHAR(4) REFERENCES emp,
+    vend_id      INTEGER,
+    req_date     DATE,
+    purch_date   DATE,
+    receive_date DATE,
+    receiver_id  VARCHAR(4) REFERENCES emp,
+    invoice_num  VARCHAR(20),
+    paid_date    DATE,
+    FOREIGN KEY  (dept_num, gl_code) REFERENCES gl_codes
 );
 
 DROP TABLE IF EXISTS items_purchased CASCADE;
@@ -145,4 +139,4 @@ create TABLE items_purchased
  PRIMARY KEY (po_num, item_num)
 );
 
---\i population.sql
+\i population.sql

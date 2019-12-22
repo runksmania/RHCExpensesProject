@@ -1,7 +1,9 @@
 /* RHC Expenses Project Database Default Population File
-   Last modified: 12-21-19
+   Last modified: 12-22-19
    Author: Michael Cottrell
 */
+
+delete from emp;
 
 INSERT INTO emp
 VALUES
@@ -15,4 +17,9 @@ VALUES
 1
 );
 
---\i insert_GL.sql
+delete from dept_gl_intersect;
+delete from dept;
+delete from gl_codes;
+
+\i dept_population.sql
+\i gl_population.sql
