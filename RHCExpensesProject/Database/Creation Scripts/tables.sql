@@ -95,7 +95,8 @@ CREATE TABLE emp
     salt         VARCHAR(40)  NOT NULL,
     pass         VARCHAR(128) NOT NULL,
     email        VARCHAR(100),
-    access_token INTEGER    
+    access_token INTEGER,
+    first_login  CHAR(1) DEFAULT NULL
 );
  
 DROP TABLE IF EXISTS emp_phone CASCADE;
