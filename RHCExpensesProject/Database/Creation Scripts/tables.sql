@@ -9,10 +9,11 @@ CREATE TABLE vendor
 (
     vendor_id       SERIAL UNIQUE,
     vendor_name     VARCHAR(50)  NOT NULL,
-    vendor_address  VARCHAR(50) NOT NULL,
-    vendor_city     VARCHAR(30) NOT NULL,
-    vendor_state    VARCHAR(2)  NOT NULL,
-    vendor_zip      VARCHAR(10) NOT NULL,
+    vendor_address  VARCHAR(50)  NOT NULL,
+    vendor_city     VARCHAR(30)  NOT NULL,
+    vendor_state    VARCHAR(2)   NOT NULL,
+    vendor_zip      VARCHAR(10)  NOT NULL,
+    payment_terms   VARCHAR(25),
     PRIMARY KEY     (vendor_id, vendor_name, vendor_address)
 );
 
@@ -113,20 +114,21 @@ DROP TABLE IF EXISTS purchase_order CASCADE;
 
 create TABLE purchase_order
 (
-    po_num       SERIAL PRIMARY KEY,
-    dept_num     CHAR(2),
-    gl_code      CHAR(5), 
-    total_amount MONEY,
-    req_id       VARCHAR(4) REFERENCES emp,
-    approver_id  VARCHAR(4) REFERENCES emp,
-    vend_id      INTEGER,
-    req_date     DATE,
-    purch_date   DATE,
-    receive_date DATE,
-    receiver_id  VARCHAR(4) REFERENCES emp,
-    invoice_num  VARCHAR(20),
-    paid_date    DATE,
-    FOREIGN KEY  (dept_num, gl_code) REFERENCES gl_codes
+    po_num        SERIAL PRIMARY KEY,
+    dept_num      CHAR(2),
+    gl_code       CHAR(5), 
+    total_amount  MONEY,
+    req_id        VARCHAR(4) REFERENCES emp,
+    req_date      DATE,
+    approver_id   VARCHAR(4) REFERENCES emp,
+    approved_date DATE,
+    vend_id       INTEGER,
+    purch_date    DATE,
+    receiver_id   VARCHAR(4) REFERENCES emp,
+    receive_date  DATE,
+    invoice_num   VARCHAR(20),
+    paid_date     DATE,
+    FOREIGN KEY   (dept_num, gl_code) REFERENCES gl_codes
 );
 
 DROP TABLE IF EXISTS items_purchased CASCADE;
@@ -134,7 +136,7 @@ DROP TABLE IF EXISTS items_purchased CASCADE;
 create TABLE items_purchased
 (po_num      INTEGER REFERENCES purchase_order,
  item_num    INTEGER,
- quantity    integer,
+ quantity    INTEGER,
  total       MONEY,
  PRIMARY KEY (po_num, item_num)
 );
