@@ -41,6 +41,10 @@
         <form action="/main/searchRequests" method="get">
             <input type="submit" name="searchRequests" value="Search Requests" />
         </form>
+
+        <form action="/main/addNewVendor" method="get">
+            <input type="submit" name="addVendor" value="Add New Vendor" />
+        </form>
         <% } %>
 
         <% if(accessToken < 2 && accessToken >= 0) { %>

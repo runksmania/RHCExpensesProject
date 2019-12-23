@@ -386,64 +386,82 @@ app.get('/main/searchRequests', (req, res) =>
 
 app.get('/main/searchRequests/?*', [body('query.search').trim().escape()], (req, res) =>
 {
-    logger.info(req.session.user.username + ' searches for requests matching: ' + req.query.search);
-
-    dbhandler.searchRequests(req.query.search, function (err, result)
+    if (req.session && req.session.user)
     {
-        if (err)
+            logger.info(req.session.user.username + ' searches for requests matching: ' + req.query.search);
+
+        dbhandler.searchRequests(req.query.search, function (err, result)
         {
-            logger.error(err);
-            res.send(null);
-        }
-        else
-        {
-            if (result)
+            if (err)
             {
-
-
-                for (var i = 0; i < result.length; i++)
-                {
-                    //Remove parts of the result that won't go in the table, and the client doesn't need to see.
-                    delete result[i].idmaterial_request;
-                    delete result[i].requester_id;
-                    delete result[i].manager_id;
-                    delete result[i].planner_id;
-                    delete result[i].fulfiller_id;
-                    delete result[i].deleted;
-                    delete result[i].deleted_by;
-                    delete result[i].deleted_time;
-
-                    //Change value to string to render on table.
-                    if (result[i].thaw_required == 1)
-                    {
-                        result[i].thaw_required = 'Yes';
-                    }
-                    else
-                    {
-                        result[i].thaw_required = 'No';
-                    }
-
-                    //Change empty null values to N/A for better readability on table.
-                    for (var property in result[i])
-                    {
-                        if (result[i][property] == null || result[i][property] == '')
-                        {
-                            result[i][property] = 'N/A';
-                        }
-                    }
-                }
-
+                logger.error(err);
+                res.send(null);
             }
             else
             {
-                result = null;
+                if (result)
+                {
+
+
+                    for (var i = 0; i < result.length; i++)
+                    {
+                        //Remove parts of the result that won't go in the table, and the client doesn't need to see.
+                        delete result[i].idmaterial_request;
+                        delete result[i].requester_id;
+                        delete result[i].manager_id;
+                        delete result[i].planner_id;
+                        delete result[i].fulfiller_id;
+                        delete result[i].deleted;
+                        delete result[i].deleted_by;
+                        delete result[i].deleted_time;
+
+                        //Change value to string to render on table.
+                        if (result[i].thaw_required == 1)
+                        {
+                            result[i].thaw_required = 'Yes';
+                        }
+                        else
+                        {
+                            result[i].thaw_required = 'No';
+                        }
+
+                        //Change empty null values to N/A for better readability on table.
+                        for (var property in result[i])
+                        {
+                            if (result[i][property] == null || result[i][property] == '')
+                            {
+                                result[i][property] = 'N/A';
+                            }
+                        }
+                    }
+
+                }
+                else
+                {
+                    result = null;
+                }
+
+                res.send(result);
             }
 
-            res.send(result);
-        }
+        });
+    }
+    else
+    {
+        res.redirect('/');
+    }
+    
 
-    });
+});
 
+app.get('/main/addNewVendor', (req, res) =>
+{
+    if (!req.session && !req.session.user)
+    {
+        res.redirect('/');
+    }
+
+    res.render('addNewVendor');
 });
 
 app.get('/main/admin/addNewUser', (req, res) =>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Creation</title>
+    <link rel="stylesheet" type="text/css" href="/css/addNewUser.css" />
+    <link rel="shortcut icon" href="/graphics/favicon.png" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="/scripts/addNewUser.js"></script>
+</head>
+<body>
+    <div class="contentWrapper">
+        <div class="content">
+
+            <div class="createForm">
+                <img class="rhcLogo" src="/graphics/rhc_logo_color.png" width="25%" height="25%"/>
+                <h1>Add New Vendor</h1>
+                <form class="newUserForm" action="/main/admin/addNewVendor" method="post" autocomplete="off">
+                    <input type="text" name="vendor_name" placeholder="Enter Vendor Name" autofocus required />
+                    <p></p>
+                    
+                    <input type="text" name="vendor_address" placeholder="Enter Street Address" required />
+                    <p></p>
+
+                    <input type="text" name="vendor_city" placeholder="City" required />
+                    <p></p>
+
+                    <input type="text" name="vendor_zip" placeholder="Zip Code" required />
+                    <p></p>
+                    
+                    <input type="text" name="payment_terms" placeholder="Payment Terms" required />
+                    <p></p>
+
+                    <input class="submit" type="submit" name="loginBtn" value="Create Vendor"/>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <a class="logoutLink" href="http://localhost:8080/logout">Logout</a>
+
+</body>
+</html>
