@@ -116,3 +116,7 @@ h2{
 .loginForm a:hover{
     color: #ffc107;
 }
+
+#resetBtn{
+    width: 150px;
+}

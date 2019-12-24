@@ -7,5 +7,7 @@
         this.name = name;
         this.email = email;
         this.accessToken = accessToken;
+        this.firstLogin = false;
+        this.resetPass = false;
     }
 }

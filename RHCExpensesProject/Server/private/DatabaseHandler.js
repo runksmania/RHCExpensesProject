@@ -58,17 +58,18 @@ module.exports = class DatabaseHandler
             else
             {
                 //Check login credentials, against database.
-                result = result.rows
-                user.id = result[0].iduser;
-                user.username = result[0].username;
-                user.name = result[0].fname + ' ' + result[0].lname;
-                user.email = result[0].email;
-                user.accessToken = result[0].access_token;
+                result = result.rows[0]
+                user.id = result.iduser;
+                user.username = result.username;
+                user.name = result.fname + ' ' + result.lname;
+                user.email = result.email;
+                user.accessToken = result.access_token;
+                user.firstLogin = (result.first_login == null ? true : false);
 
                 function hashPassword(pass)
                 {
                     pass = crypto.createHmac('sha512', pass)
-                        .update(result[0].salt)
+                        .update(result.salt)
                         .digest('hex');
 
                     return pass;
@@ -76,7 +77,7 @@ module.exports = class DatabaseHandler
 
                 var hashPass = hashPassword(pass);
 
-                if (hashPass != result[0].pass)
+                if (hashPass != result.pass)
                 {
                     //Login results failed, set user null to show failed login upon returning.
                     user = null;
@@ -122,6 +123,51 @@ module.exports = class DatabaseHandler
             return done(err, true);
 
         });
+    }
+
+    //Function to grab salt for resetting password.
+    saltQuery(username, done)
+    {
+        this.pool.query('SELECT salt FROM emp WHERE username = $1', [username], function(err, res)
+        {
+            return done(err, res.rows);
+        });
+    }
+
+    //This function changes the password in the database for the user.
+    resetPassword(username, password, done)
+    {
+        this.saltQuery(username, function(err,res)
+        {
+            if(err)
+            {
+                return err
+            }
+
+            var salt = res[0].salt;
+            var tempDbhandler = new DatabaseHandler();
+
+            function hashPassword(password)
+            {
+                var pass = crypto.createHmac('sha512', password)
+                    .update(salt)
+                    .digest('hex');
+
+                return pass;
+            }
+
+            var hashPass = hashPassword(password);
+
+            var queryString = 'UPDATE emp\n'
+                + 'SET pass = $1,\n'
+                + 'first_login = 2\n'
+                + 'WHERE username = $2;'
+
+            tempDbhandler.pool.query(queryString, [hashPass, username], function(error, result)
+            {
+                return done(error, result);
+            });
+        });   
     }
 
     //This function inserts a new material request into the database.

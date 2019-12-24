@@ -103,6 +103,17 @@ app.get('/login', (req, res) =>
     res.redirect('/');
 });
 
+app.get('/resetPassword', (req, res) =>
+{
+    if (req.session && req.session.user)
+    {
+        res.render('resetPassword');
+    }
+
+    res.redirect('/');
+
+});
+
 app.get('/main', (req, res) =>
 {
     logger.info(req.session);
@@ -540,7 +551,8 @@ app.post('/login', [body('username').trim().escape()], (req, res) =>
             else
             {
                 req.session.user = user;
-                res.redirect('/main');
+
+                user.firstLogin == false ? res.redirect('/main') : res.redirect('/resetPassword')
             }
         }
     });
@@ -687,9 +699,9 @@ app.post('/main/admin/addNewUser', (req, res) =>
         }
     }
 
-    logger.info(req.body)
+    logger.info(req.session.user.username + ' is creating a user for: ' + req.body.username);
 
-    dbhandler.addNewUser(req.body.emp_id, req.body.username, req.body.fname, req.body.lname, req.body.email,
+    dbhandler.addNewUser(req.body.empId, req.body.username, req.body.fname, req.body.lname, req.body.email,
         req.body.password, req.body.accessToken, function (err, bool)
     {
         if (err)
@@ -703,7 +715,7 @@ app.post('/main/admin/addNewUser', (req, res) =>
         }
         else
         {
-            var flashMessage = 'User account was successfully created for user: ' + req.body.fname + ' ' +req.body.lname;
+            var flashMessage = 'User account was successfully created for user: ' + req.body.fname + ' ' + req.body.lname;
             req.flash('info', 'addSuccess');
             req.flash('addSuccess', flashMessage);
             res.redirect('/');
@@ -713,7 +725,7 @@ app.post('/main/admin/addNewUser', (req, res) =>
 
 app.post('/pasword=forgot*', [body('username').trim().escape()], (req, res) =>
 {
-    mailer.sendMail('password', req.body.username, function (err, result)
+    mailer.sendMail('password', userInfo.username, function (err, result)
     {
         if (err)
         {
@@ -755,6 +767,45 @@ app.post('/username=forgot*', [body('email').trim().escape], (req, res) =>
             res.redirect('/');
         }
     });
+});
+
+app.post('/resetPassword', (req, res) =>
+{
+    if (req.session && req.session.user)
+    {
+        var user = req.session.user;
+
+        if (user.firstLogin || user.resetPass)
+        {
+            dbhandler.resetPassword(user.username, req.body.pass, function(err, bool)
+            {
+                if(err)
+                {
+                    logger.error(err);
+                    var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
+                        + ' should this issue persist.';
+                    req.flash('info', 'requestError');
+                    req.flash('requestError', flashMessage);
+                    res.redirect('/');
+
+                }
+                else
+                {
+                    req.flash('info', 'passwordReset');
+                    req.flash('passwordReset', 'Your password has been reset');
+                    res.redirect('/');
+                }
+            });
+        }
+        else
+        {
+            res.redirect('/main');
+        }
+    }
+    else
+    {
+        res.redirect('/');
+    }
 });
 
 app.use((req, res) =>
