@@ -67,10 +67,6 @@ module.exports = class DatabaseHandler
 
                 //Todays date - last pass change date / ms in 3 months.
                 var passAge = Math.floor((Date.now() - result.pass_age) / (2592000000))
-                logger.debug(result.pass_age);
-                logger.debug(Date.now());
-                logger.debug(Date.now() - result.pass_age);
-                logger.debug(passAge);
                 user.resetPass = (user.firstLogin != null || passAge >= 3 ? true : false);
 
                 function hashPassword(pass)
