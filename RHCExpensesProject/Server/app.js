@@ -109,18 +109,23 @@ app.get('/resetPassword', (req, res) =>
     {
         res.render('resetPassword');
     }
-
-    res.redirect('/');
+    else
+    {
+        res.redirect('/');
+    }
 
 });
 
 app.get('/main', (req, res) =>
 {
-    logger.info(req.session);
-
     if (req.session && req.session.user)
     {
         let data = { name: req.session.user.name, accessToken: req.session.user.accessToken };
+
+        if (req.session.user.resetPass == true)
+        {
+            res.render('resetPassword');
+        }
 
         res.render('main', data);
     }
@@ -132,7 +137,7 @@ app.get('/main', (req, res) =>
 
 app.get('/main/requestMaterials', (req, res) =>
 {
-    if (req.session && req.session.user)
+    if (req.session && req.session.user && req.session.user.resetPass != true)
     {
         res.render('requestMaterials');
     }
@@ -145,7 +150,7 @@ app.get('/main/requestMaterials', (req, res) =>
 
 app.get('/main/viewPendingRequests', (req, res) =>
 {
-    if (req.session && req.session.user)
+    if (req.session && req.session.user && req.session.user.resetPass != true)
     {
         dbhandler.viewPendingRequests(req.session.user.id, function (err, result)
         {
@@ -204,7 +209,7 @@ app.get('/main/viewPendingRequests', (req, res) =>
 
 app.get('/main/alterRequests', (req, res) =>
 {
-    if (req.session && req.session.user && req.session.user.accessToken < 6)
+    if (req.session && req.session.user && req.session.user.accessToken < 6  && req.session.user.resetPass != true)
     {
         dbhandler.viewPendingRequests(req.session.user.id, function (err, result)
         {
@@ -254,8 +259,6 @@ app.get('/main/alterRequests', (req, res) =>
     }
     else
     {
-        req.flash('info', 'Inadequate Authorization')
-        req.flash('Inadequate Authorization', 'You must be logged in or have higher access privleges to view this page.');
         res.redirect('/');
     }
 
@@ -263,7 +266,7 @@ app.get('/main/alterRequests', (req, res) =>
 
 app.get('/main/reviewPendingRequests', (req, res) =>
 {
-    if (req.session && req.session.user && req.session.user.accessToken < 5)
+    if (req.session && req.session.user && req.session.user.accessToken < 5 && req.session.user.resetPass != true)
     {
         dbhandler.viewPendingRequests(req.session.user.id, function (err, result)
         {
@@ -319,8 +322,6 @@ app.get('/main/reviewPendingRequests', (req, res) =>
     }
     else
     {
-        req.flash('info', 'Inadequate Authorization')
-        req.flash('Inadequate Authorization', 'You must be logged in or have higher access privleges to view this page.');
         res.redirect('/');
     }
 
@@ -328,7 +329,7 @@ app.get('/main/reviewPendingRequests', (req, res) =>
 
 app.get('/main/recentRequests', (req, res) =>
 {
-    if (req.session && req.session.user)
+    if (req.session && req.session.user && req.session.user.resetPass != true)
     {
         dbhandler.viewRecentRequests(function (err, result)
         {
@@ -385,7 +386,7 @@ app.get('/main/recentRequests', (req, res) =>
 
 app.get('/main/searchRequests', (req, res) =>
 {
-    if (req.session && req.session.user)
+    if (req.session && req.session.user && req.session.user.resetPass != true)
     {
         res.render('search');
     }
@@ -397,7 +398,7 @@ app.get('/main/searchRequests', (req, res) =>
 
 app.get('/main/searchRequests/?*', [body('query.search').trim().escape()], (req, res) =>
 {
-    if (req.session && req.session.user)
+    if (req.session && req.session.user && req.session.user.resetPass != true)
     {
             logger.info(req.session.user.username + ' searches for requests matching: ' + req.query.search);
 
@@ -467,19 +468,21 @@ app.get('/main/searchRequests/?*', [body('query.search').trim().escape()], (req,
 
 app.get('/main/addNewVendor', (req, res) =>
 {
-    if (!req.session && !req.session.user)
+    if (!req.session && !req.session.user && req.session.user.resetPass != true)
+    {
+        res.render('addNewVendor');
+    }
+    else
     {
         res.redirect('/');
     }
-
-    res.render('addNewVendor');
 });
 
 app.get('/main/admin/addNewUser', (req, res) =>
 {
     var adminRights = false;
 
-    if (req.session && req.session.user)
+    if (req.session && req.session.user && req.session.user.resetPass != true)
     {
         if (req.session.user.accessToken < 2 && req.session.user.accessToken >= 0)
         {
@@ -494,8 +497,6 @@ app.get('/main/admin/addNewUser', (req, res) =>
     }
     else
     {
-        req.flash('info', 'Inadequate Authorization')
-        req.flash('Inadequate Authorization', 'You must be logged in under an administrator account to view this page.');
         res.redirect('/');
     }
 });
@@ -551,8 +552,7 @@ app.post('/login', [body('username').trim().escape()], (req, res) =>
             else
             {
                 req.session.user = user;
-
-                user.firstLogin == false ? res.redirect('/main') : res.redirect('/resetPassword')
+                user.resetPass == false ? res.redirect('/main') : res.redirect('/resetPassword')
             }
         }
     });
@@ -793,6 +793,7 @@ app.post('/resetPassword', (req, res) =>
                 {
                     req.flash('info', 'passwordReset');
                     req.flash('passwordReset', 'Your password has been reset');
+                    req.session.user.resetPass = false;
                     res.redirect('/');
                 }
             });

@@ -88,16 +88,20 @@ DROP TABLE IF EXISTS emp CASCADE;
 
 CREATE TABLE emp
 (
-    emp_num      VARCHAR(4)   PRIMARY KEY,
-    username     VARCHAR(20)  UNIQUE NOT NULL,
-    fname        VARCHAR(40)  NOT NULL,
-    lname        VARCHAR(40)  NOT NULL,
-    salt         VARCHAR(40)  NOT NULL,
-    pass         VARCHAR(128) NOT NULL,
-    email        VARCHAR(100),
-    access_token INTEGER,
-    first_login  CHAR(1) DEFAULT NULL
+    emp_num       VARCHAR(4)   PRIMARY KEY,
+    username      VARCHAR(20)  UNIQUE NOT NULL,
+    fname         VARCHAR(40)  NOT NULL,
+    lname         VARCHAR(40)  NOT NULL,
+    salt          VARCHAR(40)  NOT NULL,
+    pass          VARCHAR(128) NOT NULL,
+    email         VARCHAR(100),
+    access_token  INTEGER,
+    first_login   CHAR(1) DEFAULT NULL,
+    pass_age      DATE NOT NULL,
+    security_code CHAR(4) DEFAULT NULL
 );
+
+
  
 DROP TABLE IF EXISTS emp_phone CASCADE;
 

@@ -64,7 +64,14 @@ module.exports = class DatabaseHandler
                 user.name = result.fname + ' ' + result.lname;
                 user.email = result.email;
                 user.accessToken = result.access_token;
-                user.firstLogin = (result.first_login == null ? true : false);
+
+                //Todays date - last pass change date / ms in 3 months.
+                var passAge = Math.floor((Date.now() - result.pass_age) / (2592000000))
+                logger.debug(result.pass_age);
+                logger.debug(Date.now());
+                logger.debug(Date.now() - result.pass_age);
+                logger.debug(passAge);
+                user.resetPass = (user.firstLogin != null || passAge >= 3 ? true : false);
 
                 function hashPassword(pass)
                 {
@@ -160,7 +167,8 @@ module.exports = class DatabaseHandler
 
             var queryString = 'UPDATE emp\n'
                 + 'SET pass = $1,\n'
-                + 'first_login = 2\n'
+                + 'first_login = 1,\n'
+                + 'pass_age = NOW()\n'
                 + 'WHERE username = $2;'
 
             tempDbhandler.pool.query(queryString, [hashPass, username], function(error, result)
