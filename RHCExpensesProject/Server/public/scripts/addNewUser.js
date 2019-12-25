@@ -2,6 +2,23 @@
 
 $(document).ready(function ()
 {
+    $("#pass").blur(function ()
+    {
+        var user_pass = $("#pass").val();
+        var user_pass2 = $("#passConfirm").val();
+
+        if (user_pass.length == 0)
+        {
+            animatePasswordMismatch();
+        } else if (user_pass === user_pass2)
+        {
+            $('.passMismatch').hide();
+        } else
+        {
+            animatePasswordMismatch();
+        }
+
+    });
 
     $("#passConfirm").blur(function ()
     {

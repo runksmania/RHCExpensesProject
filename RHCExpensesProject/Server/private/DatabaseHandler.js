@@ -4,9 +4,9 @@
  * Module Dependencies.
  */
 const {Pool, Client} = require('pg');
-const crypto = require('crypto');
 const logger = require('../private/logger');
 const User = require('../private/User');
+const hash = require('../private/hash.js')
 
 module.exports = class DatabaseHandler
 {
@@ -69,16 +69,7 @@ module.exports = class DatabaseHandler
                 var passAge = Math.floor((Date.now() - result.pass_age) / (2592000000))
                 user.resetPass = (user.firstLogin != null || passAge >= 3 ? true : false);
 
-                function hashPassword(pass)
-                {
-                    pass = crypto.createHmac('sha512', pass)
-                        .update(result.salt)
-                        .digest('hex');
-
-                    return pass;
-                };
-
-                var hashPass = hashPassword(pass);
+                var hashPass = hash.hashPassword(result.salt, pass);
 
                 if (hashPass != result.pass)
                 {
@@ -98,17 +89,7 @@ module.exports = class DatabaseHandler
     addNewUser(emp_id, username, fname, lname, email, pass, accessToken, done)
     {
         var salt = crypto.randomBytes(20).toString('hex');
-
-        function hashPassword(password)
-        {
-            pass = crypto.createHmac('sha512', pass)
-                .update(salt)
-                .digest('hex');
-
-            return pass;
-        };
-
-        var hashPass = hashPassword(pass);
+        var hashPass = hash.hashPassword(salt, pass);
 
         //Set up parameterized query.
         var queryString = 'INSERT INTO emp\n'
@@ -137,6 +118,36 @@ module.exports = class DatabaseHandler
         });
     }
 
+    //Function to grab prev passwords for user.
+    prevPassQuery(username, pass, done)
+    {
+        this.saltQuery(username, function(err, res)
+        {
+            if (err)
+            {
+                return err;
+            }
+
+            var hashPass = hash.hashPassword(res[0].salt, pass);
+
+            var queryString = 'SELECT prev_pass\n'
+                + 'FROM emp_prev_pass\n'
+                + 'WHERE prev_pass = $1 AND emp_num = (\n'
+                    + 'SELECT emp_num\n'
+                    + 'FROM emp\n'
+                    + 'WHERE username = $2\n'
+                + ');';
+
+            var tempDbhandler = new DatabaseHandler();
+
+            tempDbhandler.pool.query(queryString, [hashPass, username], function(error, result)
+            {
+                return done(error, result.rows)
+            });
+
+        });
+    }
+
     //This function changes the password in the database for the user.
     resetPassword(username, password, done)
     {
@@ -144,22 +155,12 @@ module.exports = class DatabaseHandler
         {
             if(err)
             {
-                return err
+                return err;
             }
 
             var salt = res[0].salt;
             var tempDbhandler = new DatabaseHandler();
-
-            function hashPassword(password)
-            {
-                var pass = crypto.createHmac('sha512', password)
-                    .update(salt)
-                    .digest('hex');
-
-                return pass;
-            }
-
-            var hashPass = hashPassword(password);
+            var hashPass = hash.hashPassword(salt, password);
 
             var queryString = 'UPDATE emp\n'
                 + 'SET pass = $1,\n'

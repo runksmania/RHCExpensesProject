@@ -1,5 +1,5 @@
 /* RHC Expenses Project Database Default Population File
-   Last modified: 12-22-19
+   Last modified: 12-25-19
    Author: Michael Cottrell
 */
 
@@ -33,8 +33,7 @@ VALUES
 Now()
 );
 
-delete from dept;
-delete from gl_codes;
-
+--delete from dept;
+--delete from gl_codes;
 --\i dept_population.sql
 --\i gl_population.sql

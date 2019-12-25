@@ -6,6 +6,7 @@
 const databaseHandler = require('./private/DatabaseHandler');
 const logger = require('./private/logger');
 const Constants = require('./private/Constants');
+const hash = require('./private/hash');
 //const Mailer = require('./private/mailer');
 
 /**
@@ -107,7 +108,7 @@ app.get('/resetPassword', (req, res) =>
 {
     if (req.session && req.session.user)
     {
-        res.render('resetPassword');
+        res.render('resetPassword', {failed: false});
     }
     else
     {
@@ -124,7 +125,7 @@ app.get('/main', (req, res) =>
 
         if (req.session.user.resetPass == true)
         {
-            res.render('resetPassword');
+            res.redirect('/resetPassword');
         }
 
         res.render('main', data);
@@ -777,24 +778,35 @@ app.post('/resetPassword', (req, res) =>
 
         if (user.firstLogin || user.resetPass)
         {
-            dbhandler.resetPassword(user.username, req.body.pass, function(err, bool)
-            {
-                if(err)
+            dbhandler.prevPassQuery(user.username, req.body.pass, function(error, result)
+            {  
+                if (result.length == 0)
                 {
-                    logger.error(err);
-                    var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
-                        + ' should this issue persist.';
-                    req.flash('info', 'requestError');
-                    req.flash('requestError', flashMessage);
-                    res.redirect('/');
+                
+                    dbhandler.resetPassword(user.username, req.body.pass, function(err, bool)
+                    {
+                        if(err)
+                        {
+                            logger.error(err);
+                            var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
+                                + ' should this issue persist.';
+                            req.flash('info', 'requestError');
+                            req.flash('requestError', flashMessage);
+                            res.redirect('/');
 
+                        }
+                        else
+                        {
+                            req.flash('info', 'passwordReset');
+                            req.flash('passwordReset', 'Your password has been reset');
+                            req.session.user.resetPass = false;
+                            res.redirect('/');
+                        }
+                    })
                 }
                 else
                 {
-                    req.flash('info', 'passwordReset');
-                    req.flash('passwordReset', 'Your password has been reset');
-                    req.session.user.resetPass = false;
-                    res.redirect('/');
+                    res.render('resetPassword', {failed: true});
                 }
             });
         }

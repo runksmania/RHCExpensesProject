@@ -7,6 +7,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="/scripts/addNewUser.js"></script>
     <script src="/scripts/logout.js"></script>
+    <script src="/scripts/login.js"></script>
 </head>
 <body>
     <div class="contentWrapper">
@@ -31,12 +32,12 @@
                     <input type="email" name="email" placeholder="Enter Email" />
                     <p></p>
 
-                    <input class="pass" type="password" id="pass" name="password" placeholder="Enter Password" required />
+                    <input class="passwordInput" type="password" id="pass" name="password" placeholder="Enter Password" required />
                     <p></p>
-                    <input class="pass" type="password" id="passConfirm" name="passConfirm" placeholder="Re-enter Password" required />
+                    <input class="passwordInput" type="password" id="passConfirm" name="passConfirm" placeholder="Re-enter Password" required />
                     <p></p>
                     <p style="display:none" class="capsOn">Caps Lock is on.</p>
-                    <p style="display:none" class="passMismatch">Passwords do not match</p>
+                    <p style="display:none" class="passMismatch">Passwords do not match.</p>
 
                     <label>Access Permisions</label>
                     <select name="accessToken" required>

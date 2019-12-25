@@ -1,5 +1,5 @@
 /* RHC Expenses Project Database Table Creation File
-   Last modified: 12-22-19
+   Last modified: 12-25-19
    Author: Michael Cottrell
 */
 
@@ -101,8 +101,15 @@ CREATE TABLE emp
     security_code CHAR(4) DEFAULT NULL
 );
 
+DROP TABLE IF EXISTS emp_prev_pass CASCADE;
 
- 
+CREATE TABLE emp_prev_pass
+(
+    emp_num     VARCHAR(4) REFERENCES emp,
+    prev_pass   VARCHAR(128),
+    PRIMARY KEY (emp_num, prev_pass)
+);
+
 DROP TABLE IF EXISTS emp_phone CASCADE;
 
 create TABLE emp_phone
@@ -146,4 +153,5 @@ create TABLE items_purchased
  PRIMARY KEY (po_num, item_num)
 );
 
+\i triggers.sql
 \i population.sql
