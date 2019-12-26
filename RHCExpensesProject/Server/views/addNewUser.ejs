@@ -19,6 +19,15 @@
                 <form class="newUserForm" action="/main/admin/addNewUser" method="post" autocomplete="off">
                     <input type="text" name="empId" placeholder="Enter Employee Id#" autofocus required />
                     <p></p>
+
+                    <label>Department</label>
+                    <select name="dept" required>
+                        <option value="" disabled selected="selected">Select a department--</option> 
+                        <% for (var i = 0; i < deptArr.length; i++) { %>
+                            <option value="<%= deptNumArr[i] %>""><%= deptArr[i] %></option> 
+                        <%}%>
+                    </select>
+                    <p></p>
                     
                     <input type="text" name="username" placeholder="Enter Username" required />
                     <p></p>

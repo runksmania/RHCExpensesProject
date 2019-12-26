@@ -1,36 +1,32 @@
 ﻿'use strict'
 
+/*Array of rules and the information target*/
+var rules = [{
+    Pattern: "[A-Z]",
+    Target: "UpperCase"
+  },
+  {
+    Pattern: "[a-z]",
+    Target: "LowerCase"
+  },
+  {
+    Pattern: "[0-9]",
+    Target: "Numbers"
+  },
+  {
+    Pattern: "[!@@#$%^&*]",
+    Target: "Symbols"
+  }
+];
+
 /*Actual validation function*/
-function validatePassword() {
-    /*Array of rules and the information target*/
-    var rules = [{
-        Pattern: "[A-Z]",
-        Target: "UpperCase"
-      },
-      {
-        Pattern: "[a-z]",
-        Target: "LowerCase"
-      },
-      {
-        Pattern: "[0-9]",
-        Target: "Numbers"
-      },
-      {
-        Pattern: "[!@@#$%^&*]",
-        Target: "Symbols"
-      }
-    ];
-  
-    //Just grab the password once
+function validatePassword() {    
+
     var password = $(this).val();
   
-    /*Length Check, add and remove class could be chained*/
-    /*I've left them seperate here so you can see what is going on */
-    /*Note the Ternary operators ? : to select the classes*/
     $("#Length").removeClass(password.length > 7 ? "glyphicon-remove" : "glyphicon-ok");
     $("#Length").addClass(password.length > 7 ? "glyphicon-ok" : "glyphicon-remove");
     
-    /*Iterate our remaining rules. The logic is the same as for Length*/
     for (var i = 0; i < rules.length; i++) {
   
       $("#" + rules[i].Target).removeClass(new RegExp(rules[i].Pattern).test(password) ? "glyphicon-remove" : "glyphicon-ok"); 
@@ -56,6 +52,26 @@ function validateMatch()
     }
 }
 
+function validate(password1, password2)
+{
+    var boolsArr = [password1 === password2];
+
+    for (var i = 0; i < rules.length; i++) {
+  
+        boolsArr.push(new RegExp(rules[i].Pattern).test(password1) ? true : false); 
+    }
+
+    for (var i = 0; i < boolsArr.length; i++)
+    {
+        if (boolsArr[i] == false)
+        {
+            return false;
+        }
+    }
+
+    return true;
+}
+
 $(document).ready(function ()
 {
     
@@ -63,16 +79,15 @@ $(document).ready(function ()
     {
         var user_pass = $("#pass").val();
         var user_pass2 = $("#passConfirm").val();
-        alert('hello');
-        e.preventDefault();
+        var isValid = validate(user_pass, user_pass2);
 
-        if (user_pass === user_pass2 && user_pass.length != 0)
+        if (isValid)
         {
             return true;
         } else
         {
-            animatePasswordMismatch()
             e.preventDefault(e);
+            return false;
         }
 
     });

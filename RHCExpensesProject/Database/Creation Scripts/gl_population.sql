@@ -3,6 +3,8 @@
    Author: Michael Cottrell
 */
 
+delete from gl_codes;
+
 insert into gl_codes
 values
 ('00','10000','Cage/Vault','Posting Account');

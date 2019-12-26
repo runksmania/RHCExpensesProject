@@ -3,21 +3,23 @@
    Author: Michael Cottrell
 */
 
-INSERT INTO dept
-VALUES
-('00', 'Admin');
+delete from dept;
 
 INSERT INTO dept
 VALUES
-('01', 'Slots');
+('00', 'Admin', '1');
 
 INSERT INTO dept
 VALUES
-('20', 'Hotel');
+('01', 'Slots', '1');
 
 INSERT INTO dept
 VALUES
-('23', 'Housekeeping');
+('20', 'Hotel', '1');
+
+INSERT INTO dept
+VALUES
+('23', 'Housekeeping', '1');
 
 INSERT INTO dept
 VALUES
@@ -25,7 +27,7 @@ VALUES
 
 INSERT INTO dept
 VALUES
-('30', 'Restaurant');
+('30', 'Restaurant', '1');
 
 INSERT INTO dept
 VALUES
@@ -37,11 +39,11 @@ VALUES
 
 INSERT INTO dept
 VALUES
-('50', 'Human Resources');
+('50', 'Human Resources', '1');
 
 INSERT INTO dept
 VALUES
-('61', 'Facilities');
+('61', 'Facilities', '1');
 
 INSERT INTO dept
 VALUES
@@ -49,23 +51,23 @@ VALUES
 
 INSERT INTO dept
 VALUES
-('70', 'Security');
+('70', 'Security', '1');
 
 INSERT INTO dept
 VALUES
-('75', 'Surveillance');
+('75', 'Surveillance', '1');
 
 INSERT INTO dept
 VALUES
-('80', 'Cage');
+('80', 'Cage', '1');
 
 INSERT INTO dept
 VALUES
-('82', 'Accounting/Finance');
+('82', 'Accounting/Finance', '1');
 
 INSERT INTO dept
 VALUES
-('90', 'IT');
+('90', 'IT', '1');
 
 INSERT INTO dept
 VALUES
@@ -77,7 +79,7 @@ VALUES
 
 INSERT INTO dept
 VALUES
-('95', 'Visitor Center');
+('95', 'Visitor Center', '1');
 
 INSERT INTO dept
 VALUES

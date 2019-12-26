@@ -494,7 +494,24 @@ app.get('/main/admin/addNewUser', (req, res) =>
 
     if (adminRights == true)
     {
-        res.render('addNewUser');
+        dbhandler.deptQuery( function(err, result)
+        {
+            result = result.rows;
+            logger.debug(result[0].dept_num + result[0].dept_name);
+            var deptNumArr = [];
+            var deptArr = [];
+
+            for (var i = 0; i < result.length; i++)
+            {
+                deptNumArr.push(result[i].dept_num);
+                deptArr.push(result[i].dept_name);
+            }
+
+            logger.debug(deptNumArr);
+            logger.debug(deptArr);
+
+            res.render('addNewUser', {'deptNumArr' : deptNumArr, 'deptArr' : deptArr});
+        });
     }
     else
     {
@@ -702,7 +719,7 @@ app.post('/main/admin/addNewUser', (req, res) =>
 
     logger.info(req.session.user.username + ' is creating a user for: ' + req.body.username);
 
-    dbhandler.addNewUser(req.body.empId, req.body.username, req.body.fname, req.body.lname, req.body.email,
+    dbhandler.addNewUser(req.body.empId, req.body.username, req.body.fname, req.body.lname, req.body.dept, req.body.email,
         req.body.password, req.body.accessToken, function (err, bool)
     {
         if (err)

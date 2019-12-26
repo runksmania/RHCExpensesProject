@@ -67,7 +67,7 @@ module.exports = class DatabaseHandler
 
                 //Todays date - last pass change date / ms in 3 months.
                 var passAge = Math.floor((Date.now() - result.pass_age) / (2592000000))
-                user.resetPass = (user.firstLogin != null || passAge >= 3 ? true : false);
+                user.resetPass = (result.first_login == null || passAge >= 3 ? true : false);
 
                 var hashPass = hash.hashPassword(result.salt, pass);
 
@@ -85,19 +85,31 @@ module.exports = class DatabaseHandler
         });
     }
 
-    //This function adds a new user into the database.
-    addNewUser(emp_id, username, fname, lname, email, pass, accessToken, done)
+    deptQuery(done)
     {
-        var salt = crypto.randomBytes(20).toString('hex');
+        var queryString = 'SELECT dept_num, dept_name\n'
+            + 'FROM dept\n'
+            + 'WHERE has_emp IS NOT NULL;';
+
+        this.pool.query(queryString, function (err, res)
+        {
+            return done(err, res);
+        });
+    }
+
+    //This function adds a new user into the database.
+    addNewUser(emp_id, username, fname, lname, dept, email, pass, accessToken, done)
+    {
+        var salt = hash.createSalt();
         var hashPass = hash.hashPassword(salt, pass);
 
         //Set up parameterized query.
         var queryString = 'INSERT INTO emp\n'
             + 'VALUES\n'
-            + '($1,$2,$3,$4,$5,$6,$7,$8);';
+            + '($1,$2,$3,$4,$5,$6,$7,$8,$9);';
 
         var query = this.pool.query(queryString, [emp_id, username, fname, lname, 
-            salt, hashPass, email, accessToken], function (err, result)
+            dept, salt, hashPass, email, accessToken], function (err, result)
         {
             if (!err)
             {

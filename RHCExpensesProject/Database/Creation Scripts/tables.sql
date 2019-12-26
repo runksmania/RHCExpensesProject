@@ -3,6 +3,8 @@
    Author: Michael Cottrell
 */
 
+SELECT 'Creating tables...';
+
 DROP TABLE IF EXISTS vendor CASCADE;
 
 CREATE TABLE vendor
@@ -70,7 +72,8 @@ DROP TABLE IF EXISTS dept CASCADE;
 create TABLE dept
 (
     dept_num    CHAR(2) PRIMARY KEY,
-    dept_name   VARCHAR(20)
+    dept_name   VARCHAR(20),
+    has_emp     CHAR(1) DEFAULT NULL
 );
 
 DROP TABLE IF EXISTS gl_codes CASCADE;
@@ -92,12 +95,13 @@ CREATE TABLE emp
     username      VARCHAR(20)  UNIQUE NOT NULL,
     fname         VARCHAR(40)  NOT NULL,
     lname         VARCHAR(40)  NOT NULL,
+    dept          CHAR(2)      REFERENCES dept NOT NULL,
     salt          VARCHAR(40)  NOT NULL,
     pass          VARCHAR(128) NOT NULL,
     email         VARCHAR(100),
     access_token  INTEGER,
     first_login   CHAR(1) DEFAULT NULL,
-    pass_age      DATE NOT NULL,
+    pass_age      DATE DEFAULT NOW() NOT NULL,
     security_code CHAR(4) DEFAULT NULL
 );
 
@@ -126,8 +130,8 @@ DROP TABLE IF EXISTS purchase_order CASCADE;
 
 create TABLE purchase_order
 (
-    po_num        SERIAL PRIMARY KEY,
-    dept_num      CHAR(2),
+    po_num        SERIAL     PRIMARY KEY,
+    dept_num      CHAR(2),   
     gl_code       CHAR(5), 
     total_amount  MONEY,
     req_id        VARCHAR(4) REFERENCES emp,
@@ -140,6 +144,7 @@ create TABLE purchase_order
     receive_date  DATE,
     invoice_num   VARCHAR(20),
     paid_date     DATE,
+    comments      VARCHAR(120),
     FOREIGN KEY   (dept_num, gl_code) REFERENCES gl_codes
 );
 

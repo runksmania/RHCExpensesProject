@@ -1,63 +1,35 @@
 ﻿'use strict'
 
-$(document).ready(function ()
+function validateMatch()
 {
-    $("#pass").blur(function ()
+    var user_pass = $("#pass").val();
+    var user_pass2 = $("#passConfirm").val();
+
+    if (user_pass == user_pass2 && user_pass.length > 0)
     {
-        var user_pass = $("#pass").val();
-        var user_pass2 = $("#passConfirm").val();
-
-        if (user_pass.length == 0)
-        {
-            animatePasswordMismatch();
-        } else if (user_pass === user_pass2)
-        {
-            $('.passMismatch').hide();
-        } else
-        {
-            animatePasswordMismatch();
-        }
-
-    });
-
-    $("#passConfirm").blur(function ()
-    {
-        var user_pass = $("#pass").val();
-        var user_pass2 = $("#passConfirm").val();
-
-        if (user_pass.length == 0)
-        {
-            animatePasswordMismatch();
-        } else if (user_pass === user_pass2)
-        {
-            $('.passMismatch').hide();
-        } else
-        {
-            animatePasswordMismatch();
-        }
-
-    });
-
-    function animatePasswordMismatch()
+        $('.passMismatch').hide();
+    }
+    else
     {
         $('.passMismatch').show();
         $('.passMismatch').css('color', 'red');
-        $('.passMismatch').effect('shake', { times: 2 }, 500);
     }
+}
 
+$(document).ready(function ()
+{
     $('.newUserForm').submit(function(e)
     {
         var user_pass = $("#pass").val();
         var user_pass2 = $("#passConfirm").val();
-        alert('hello');
 
-        if (user_pass === user_pass2 && user_pass.length != 0)
+        if (user_pass === user_pass2 && user_pass.length > 0)
         {
             return true;
         } else
         {
-            animatePasswordMismatch()
             e.preventDefault(e);
+            return false;
         }
 
     });
@@ -76,4 +48,7 @@ $(document).ready(function ()
             $('.capsOn').hide();
         }
     });
+
+    $("#passConfirm").on('keyup', validateMatch);
+    $("#pass").on('keyup', validateMatch);
 });
