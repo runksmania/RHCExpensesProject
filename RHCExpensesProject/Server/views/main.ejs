@@ -3,9 +3,10 @@
 <head>
     <title>Main Page</title>
     <link rel="stylesheet" type="text/css" href="/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="/css/content.css" />
     <link rel="shortcut icon" href="../graphics/favicon.png" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="/scripts/logout.js"></script>
+    <script src="/scripts/main.js"></script>
 </head>
 <body>
 
@@ -13,53 +14,44 @@
 
     <h2>RHC Expenses Main Page</h2><br />
 
-    <div class="mainButtons">
-
-        <% if(accessToken == 5 || (accessToken < 3 && accessToken >= 0)) { %>
-        <form action="/main/requestMaterials" method="get">
-            <input type="submit" name="requestMaterials" value="Request Materials" />
-        </form>
-
-        <form action="/main/alterRequests" method="get">
-            <input type="submit" name="alterRequest" value="Alter Material Request" />
-        </form>
-        <% } %>
-
-        <% if(accessToken == 5 || (accessToken < 2 && accessToken >= 0)) { %>
-        <form action="/main/viewPendingRequests" method="get">
-            <input type="submit" name="viewPendingRequests" value="View Pending Requests" />
-        </form>
-        <% } %>
-
-        <% if(accessToken < 5 && accessToken >= 0) { %>
-        <form action="/main/reviewPendingRequests" method="get">
-            <input type="submit" name="reviewPendingRequests" value="Review Pending Requests" />
-        </form>
-
-        <form action="/main/recentRequests" method="get">
-            <input type="submit" name="recentRequests" value="View Recent Requests" />
-        </form>
-
-        <form action="/main/searchRequests" method="get">
-            <input type="submit" name="searchRequests" value="Search Requests" />
-        </form>
-
-        <form action="/main/addNewVendor" method="get">
-            <input type="submit" name="addVendor" value="Add New Vendor" />
-        </form>
-        <% } %>
-
-        <% if(accessToken < 2 && accessToken >= 0) { %>
-        <form action="/main/admin/addNewUser" method="get">
-            <input type="submit" name="createUser" value="Add New User" />
-        </form>
-        <% } %>
-
-        <br />
-
+    <div class="contentWrapper">
+        <div class="content">
+            <div class="panel">
+                <h4>Vendor</h4>
+                <ul>
+                    <li>
+                        <a href="main/addNewVendor">Add Vendor</a>
+                    </li>  
+                </ul>
+            </div>
+            <div class="panel">
+                <h4>Users</h4>
+                <ul>
+                    <li>
+                        <a href="main/admin/addNewUser">Create Employee</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="panel">
+                <h4>Items</h4>
+                <ul>
+                    <li>
+                        <a href="main/addNewItem">Add Item</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="panel">
+                <h4>Purchase Orders</h4>
+                <ul>
+                    <li>
+                        <a href="/main/createPO">Create PO</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 
-    <a class="logoutLink" href="http://localhost:8080/logout">Logout</a>
+    <a href="logout">Logout</a>
 
 </body>
 </html>

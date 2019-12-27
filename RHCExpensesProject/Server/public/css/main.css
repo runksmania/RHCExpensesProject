@@ -10,16 +10,45 @@
     font-family: Arial, sans-serif;
 }
 
+h1, h2{
+    text-align: center;
+}
+
 a {
     text-decoration: none;
     font-size: 15px;
     line-height: 20px;
-    color: #f60;
+    color: rgb(0, 118, 190);
     font-weight: normal;
 }
 
-input[type="submit"] {
-    background: linear-gradient(to bottom,rgb(243, 3, 3) 0,rgb(15, 15, 15) 100%);
-    padding: 10px;
-    color: #fff;
+a:hover {
+    color: red;
+}
+
+ul {
+    padding: 0 0 0 0;
+    margin: 5px 5px 0 0;
+}
+
+li {
+    list-style-type: none;
+}
+
+.panel {
+    display: inline-block;
+    position: relative;
+    min-height: 95px;
+    margin: 3px;
+}
+
+.panel h4 {
+    color:#333;
+    margin: 0;
+    padding: 12px 8px 8px;
+    text-align: left;
+    display: inline-block;
+    border-bottom: 2px solid rgb(255, 0, 0);
+    box-sizing: border-box;
+    white-space: nowrap;
 }

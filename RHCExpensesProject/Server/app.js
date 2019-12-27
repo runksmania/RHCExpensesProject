@@ -7,6 +7,7 @@ const databaseHandler = require('./private/DatabaseHandler');
 const logger = require('./private/logger');
 const Constants = require('./private/Constants');
 const hash = require('./private/hash');
+const zipcodes = require('zipcodes');
 //const Mailer = require('./private/mailer');
 
 /**
@@ -469,7 +470,7 @@ app.get('/main/searchRequests/?*', [body('query.search').trim().escape()], (req,
 
 app.get('/main/addNewVendor', (req, res) =>
 {
-    if (!req.session && !req.session.user && req.session.user.resetPass != true)
+    if (req.session && req.session.user && req.session.user.resetPass != true)
     {
         res.render('addNewVendor');
     }
@@ -515,7 +516,7 @@ app.get('/main/admin/addNewUser', (req, res) =>
     }
 });
 
-app.get('/logout', (req, res) =>
+app.get('*/logout', (req, res) =>
 {
     req.session.destroy();
     res.redirect('/');
@@ -741,7 +742,25 @@ app.post('/main/admin/addNewVendor', (req, res) =>
 {
     if (req.session && req.session.user && !req.session.user.resetPass)
     {
-        vendorInfo = req.body;
+        var v = req.body;
+        var zip = zipcodes.lookup(v.zip);
+
+        dbhandler.addNewVendor(v.name, v.address, zip.city, zip.state, v.zip, v.terms, function(err, result)
+        {
+            if (err)
+            {
+                logger.error(err);
+                var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
+                    + ' should this issue persist.';
+                req.flash('info', 'requestError');
+                req.flash('requestError', flashMessage);
+                res.redirect('/');          
+            }
+            else
+            {
+                res.redirect('/main');
+            }
+        });
         
     }
     else
