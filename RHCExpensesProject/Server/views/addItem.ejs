@@ -3,11 +3,9 @@
 <head>
     <title>User Creation</title>
     <link rel="stylesheet" type="text/css" href="/css/addNewUser.css" />
-    <link rel="stylesheet" type="text/css" href="/css/basicResultsTable.css" />
     <link rel="shortcut icon" href="/graphics/favicon.png" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="/scripts/addNewUser.js"></script>
-    <script src="/scripts/logout.js"></script>
 </head>
 <body>
     <div class="contentWrapper">
@@ -15,15 +13,12 @@
 
             <div class="createForm">
                 <img class="rhcLogo" src="/graphics/rhc_logo_color.png" width="25%" height="25%"/>
-                <h1>Vendors</h1>
+                <h1>Add New Vendor</h1>
                 <form class="newUserForm" action="/main/admin/addNewVendor" method="post" autocomplete="off">
-                    <input type="text" name="name" placeholder="Enter Vendor Name" autofocus required />
+                    <input type="text" name="name" placeholder="Enter Item Name" autofocus required />
                     <p></p>
                     
                     <input type="text" name="address" placeholder="Enter Street Address" required />
-                    <p></p>
-
-                    <input type="text" name="city" placeholder="City" required />
                     <p></p>
 
                     <input type="text" name="zip" placeholder="Zip Code" required />
@@ -32,29 +27,12 @@
                     <input type="text" name="terms" placeholder="Payment Terms" required />
                     <p></p>
 
-                    <input class="submit" type="submit" name="saveBtn" value="Save"/>
+                    <input class="submit" type="submit" name="loginBtn" value="Create Vendor"/>
                 </form>
             </div>
-
-            <form>
-                <table cellpadding="0" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>Vendor Name</th>
-                            <th>Street Address</th>
-                            <th>Zip Code</th>
-                            <th>Payment Terms</th>
-                        </tr>
-                        <tbody>
-                        </tbody>
-                    </thead>
-                </table>
-            </form>
-
         </div>
     </div>
 
-    <a class="logoutLink" href="">Logout</a>
-
+    <a href="logout">Logout</a>
 </body>
 </html>

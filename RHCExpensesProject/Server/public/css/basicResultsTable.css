@@ -6,28 +6,8 @@
 *   viewRequests.ejs                                                                             *
 **************************************************************************************************/
 
-body {
-    font-family: Helli, sans-serif;
-    font-size: 12px;
-    line-height: 14px;
-}
-
 h2 {
     text-align: center;
-}
-
-.sidePanelWrapper {
-    color: #000;
-    border-radius: 30px;
-    -webkit-box-shadow: 0px 0px 5px #333, 0px 0px 0px #000, 0px 0px 5px #333, 0px 0px 0px #000;
-    box-shadow: 0px 0px 5px #333, 0px 0px 0px #000, 0px 0px 5px #333, 0px 0px 0px #000;
-    border: 1px solid black;
-    background-color: white;
-    background-image: -webkit-gradient( linear, left bottom, left top, color-stop(-0.0, #C6C6C6), color-stop(0.8, #E1E1E1), color-stop(1.0, #F8F8F8));
-    z-index: 1;
-    display: table;
-    position: relative;
-    padding: 15px;
 }
 
 .fixedHeader {
@@ -52,8 +32,8 @@ tbody td {
     border-collapse: collapse;
 }
 
-tbody tr:nth-child(odd) {
-    background-color: white;
+tbody tr:nth-child(even) {
+    background-color: rgb(223, 193, 193);
 }
 
 .textInput {

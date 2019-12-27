@@ -479,6 +479,18 @@ app.get('/main/addNewVendor', (req, res) =>
     }
 });
 
+app.get('/main/addItem', (req, res) =>
+{
+    if (req.session && req.session.user && req.session.user.resetPass != true)
+    {
+        res.render('addItem');
+    }
+    else
+    {
+        res.redirect('/');
+    }
+});
+
 app.get('/main/admin/addNewUser', (req, res) =>
 {
     var adminRights = false;
@@ -849,7 +861,7 @@ app.post('/resetPassword', (req, res) =>
 
 app.use((req, res) =>
 {
-    res.render('404');
+    res.redirect('/');
 });
 
 app.listen(constants.port, constants.host, () =>
