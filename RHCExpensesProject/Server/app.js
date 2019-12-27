@@ -497,7 +497,6 @@ app.get('/main/admin/addNewUser', (req, res) =>
         dbhandler.deptQuery( function(err, result)
         {
             result = result.rows;
-            logger.debug(result[0].dept_num + result[0].dept_name);
             var deptNumArr = [];
             var deptArr = [];
 
@@ -506,9 +505,6 @@ app.get('/main/admin/addNewUser', (req, res) =>
                 deptNumArr.push(result[i].dept_num);
                 deptArr.push(result[i].dept_name);
             }
-
-            logger.debug(deptNumArr);
-            logger.debug(deptArr);
 
             res.render('addNewUser', {'deptNumArr' : deptNumArr, 'deptArr' : deptArr});
         });
@@ -739,6 +735,19 @@ app.post('/main/admin/addNewUser', (req, res) =>
             res.redirect('/');
         }
     });
+});
+
+app.post('/main/admin/addNewVendor', (req, res) =>
+{
+    if (req.session && req.session.user && !req.session.user.resetPass)
+    {
+        vendorInfo = req.body;
+        
+    }
+    else
+    {
+        res.redirect('/');
+    }
 });
 
 app.post('/pasword=forgot*', [body('username').trim().escape()], (req, res) =>

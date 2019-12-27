@@ -187,6 +187,21 @@ module.exports = class DatabaseHandler
         });   
     }
 
+    //This function inserts a new vendor into the database.
+    addNewVendor(vName, vAddress, vCity, vState, vZip, payTerms)
+    {
+        var queryString = 'INSERT INTO vendor\n'
+            + 'VALUES\n'
+            + '('
+            + '$1,$2,$3,$4,$5,$6'
+            + ');';
+        
+        this.pool.query(queryString, [vName, vAddress, vCity, vState, vZip, payTerms], function(err,res)
+        {
+            return done(err, res);
+        });
+    }
+
     //This function inserts a new material request into the database.
     requestMaterials(matId, description, comment, quantity, uom, batchNum, source, destination, transNum,
         thawReq, refreezeDate, dateReq, requester, requsterId, done)

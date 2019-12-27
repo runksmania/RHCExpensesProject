@@ -1,5 +1,5 @@
 /* RHC Expenses Project Database Table Creation File
-   Last modified: 12-25-19
+   Last modified: 12-26-19
    Author: Michael Cottrell
 */
 
@@ -131,8 +131,6 @@ DROP TABLE IF EXISTS purchase_order CASCADE;
 create TABLE purchase_order
 (
     po_num        SERIAL     PRIMARY KEY,
-    dept_num      CHAR(2),   
-    gl_code       CHAR(5), 
     total_amount  MONEY,
     req_id        VARCHAR(4) REFERENCES emp,
     req_date      DATE,
@@ -144,18 +142,20 @@ create TABLE purchase_order
     receive_date  DATE,
     invoice_num   VARCHAR(20),
     paid_date     DATE,
-    comments      VARCHAR(120),
-    FOREIGN KEY   (dept_num, gl_code) REFERENCES gl_codes
+    comments      VARCHAR(120)
 );
 
 DROP TABLE IF EXISTS items_purchased CASCADE;
 
 create TABLE items_purchased
 (po_num      INTEGER REFERENCES purchase_order,
+ dept_num      CHAR(2),   
+ gl_code       CHAR(5),
  item_num    INTEGER,
  quantity    INTEGER,
  total       MONEY,
- PRIMARY KEY (po_num, item_num)
+ PRIMARY KEY (po_num, item_num),
+ FOREIGN KEY   (dept_num, gl_code) REFERENCES gl_codes
 );
 
 \i triggers.sql
