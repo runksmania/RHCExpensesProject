@@ -12,6 +12,7 @@
     "log4js": "^6.1.0",
     "nodemon": "^2.0.2",
     "pg": "^7.15.1",
+    "zipcodes": "^8.0.0"
     "supervisor": "^0.12.0"
   },
   "devDependencies": {},
