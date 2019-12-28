@@ -16,7 +16,8 @@ CREATE TABLE vendor
     vendor_state    VARCHAR(2)   NOT NULL,
     vendor_zip      VARCHAR(10)  NOT NULL,
     payment_terms   VARCHAR(25),
-    PRIMARY KEY     (vendor_id, vendor_name, vendor_address)
+    PRIMARY KEY     (vendor_id, vendor_name, vendor_address),
+    CONSTRAINT      pay_terms_constraint CHECK (payment_terms IN ('Net 30', 'COD'))
 );
 
 DROP TABLE IF EXISTS vendor_phones CASCADE;
@@ -27,7 +28,7 @@ create TABLE vendor_phones
     vendor_phone   VARCHAR(15),
     phone_type     VARCHAR(10),
     PRIMARY KEY    (vendor_id, vendor_phone),
-    CONSTRAINT     vend_phone_type_CONSTRAINT CHECK (phone_type IN ('Main', 'Fax'))
+    CONSTRAINT     vend_phone_type_constraint CHECK (phone_type IN ('Main', 'Fax'))
 );
 
 DROP TABLE IF EXISTS contact CASCADE;

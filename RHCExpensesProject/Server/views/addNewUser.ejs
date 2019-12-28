@@ -6,7 +6,6 @@
     <link rel="shortcut icon" href="/graphics/favicon.png" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="/scripts/addNewUser.js"></script>
-    <script src="/scripts/logout.js"></script>
     <script src="/scripts/login.js"></script>
 </head>
 <body>
@@ -15,7 +14,7 @@
 
             <div class="createForm">
                 <img class="rhcLogo" src="/graphics/rhc_logo_color.png" width="25%" height="25%"/>
-                <h1>User Creation</h1>
+                <h1>Employee Creation</h1>
                 <form class="newUserForm" action="/main/admin/addNewUser" method="post" autocomplete="off">
                     <input type="text" name="empId" placeholder="Enter Employee Id#" autofocus required />
                     <p></p>
@@ -63,7 +62,6 @@
         </div>
     </div>
 
-    <a class="logoutLink" href="http://localhost:8080/logout">Logout</a>
-
+    <a href="logout">Logout</a>
 </body>
 </html>
