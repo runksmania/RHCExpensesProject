@@ -480,11 +480,63 @@ app.get('/main/addNewVendor', (req, res) =>
     }
 });
 
+app.get('/main/vendors', (req, res) =>
+{
+    if (req.session && req.session.user && req.session.user.resetPass != true)
+    {
+        dbhandler.vendorQuery({'iName' : 'i'}, function (err, result)
+        {
+            if (err)
+            {
+                logger.error(err);
+                var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
+                    + ' should this issue persist.';
+                req.flash('info', 'requestError');
+                req.flash('requestError', flashMessage);
+                res.redirect('/');
+            }
+            else
+            {
+                res.render('vendors', {'vendors' : result.rows});
+            }
+        });
+    }
+    else
+    {
+        res.redirect('/');
+    }
+});
+
 app.get('/main/addItem', (req, res) =>
 {
     if (req.session && req.session.user && req.session.user.resetPass != true)
     {
-        res.render('addItem');
+        dbhandler.vendorQuery({}, function(err, result)
+        {
+            if (err)
+            {
+                logger.error(err);
+                var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
+                    + ' should this issue persist.';
+                req.flash('info', 'requestError');
+                req.flash('requestError', flashMessage);
+                res.redirect('/');
+            }
+            else
+            {
+                result = result.rows;
+                var vendNumArr = [];
+                var vendArr = [];
+    
+                for (var i = 0; i < result.length; i++)
+                {
+                    vendNumArr.push(result[i].vendor_id);
+                    vendArr.push(result[i].vendor_name);
+                }
+
+                res.render('addItem', {'vendNumArr' : vendNumArr, 'vendArr' : vendArr});
+            }
+        });
     }
     else
     {
@@ -750,7 +802,7 @@ app.post('/main/admin/addNewUser', (req, res) =>
     });
 });
 
-app.post('/main/admin/addNewVendor', (req, res) =>
+app.post('/main/addNewVendor', (req, res) =>
 {
     if (req.session && req.session.user && !req.session.user.resetPass)
     {
@@ -774,6 +826,39 @@ app.post('/main/admin/addNewVendor', (req, res) =>
             }
         });
         
+    }
+    else
+    {
+        res.redirect('/');
+    }
+});
+
+app.post('/main/addItem', (req, res) =>
+{
+    if (req.session && req.session.user && !req.session.user.resetPass)
+    {
+        var data = req.body;
+        data.vId = parseInt(data.vId);
+        data.min_quan = data.min_quan == '' ? null : parseInt(data.min_quan);
+        data.max_quan = data.max_quan == '' ? null : parseInt(data.max_quan);
+
+        dbhandler.addItem(data.name, data.vId, data.price, data.desc, data.min_quan, data.max_quan, function (err, result)
+        {
+            if (err)
+            {
+                logger.error(err);
+                var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
+                    + ' should this issue persist.';
+                req.flash('info', 'requestError');
+                req.flash('requestError', flashMessage);
+                res.redirect('/');          
+            }
+            else
+            {
+                res.redirect('/main');
+            }
+
+        });
     }
     else
     {

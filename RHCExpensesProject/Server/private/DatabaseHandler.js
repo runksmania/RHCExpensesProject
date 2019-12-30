@@ -202,6 +202,75 @@ module.exports = class DatabaseHandler
         });
     }
 
+    //This function inserts a new item into the database.
+    addItem(iName, vId, price, desc, min_quan, max_quan, done)
+    {
+        var queryString = 'INSERT INTO item\n'
+            + 'VALUES\n'
+            + '('
+            + 'DEFAULT,$1,$2,$3,$4,$5,$6'
+            + ');';
+        
+        this.pool.query(queryString, [iName, vId, price, desc, min_quan, max_quan], function (err, res)
+        {
+            return done(err, res);
+        });
+    }
+
+    //This functions grabs all vendors if no options. Query will search for partial matches.
+    //Options:
+    //  vName: Search by vendor name.
+    //  iName: Search by vendors with item name.
+    //  Both:  Include vName and iname to search by vendors with item Name.
+    vendorQuery(opts, done)
+    {
+        if (opts['vName'] || opts['iName'])
+        {
+            if (opts['vName'] && opts['iName'])
+            {
+                var queryStsring = 'SELECT *\n'
+                + 'FROM vendor v, item i\n'
+                + 'WHERE v.vendor_id = i.vendor_id\n' 
+                    + 'AND v.vendor_name LIKE $1\n'
+                    + 'AND i.item_name LIKE $2;'
+
+                this.pool.query(queryString, ['%' + opts['vName'] + '%', '%' + opts['iName'] + '%'], function(err, res)
+                {
+                    return done(err, res)
+                });
+            }
+            else if (opts['vName'])
+            {
+                var queryString = 'SELECT *\n'
+                    + 'FROM vendor v\n'
+                    + 'WHERE v.vendor_name LIKE $1;'
+
+                this.pool.query(queryString, ['%' + opts['vName'] + '%'], function(err, res)
+                {
+                    return done(err, res)
+                });
+            }
+            else 
+            {
+                var queryString = 'SELECT *\n'
+                    + 'FROM vendor v, item i\n'
+                    + 'WHERE v.vendor_id = i.vendor_id AND i.item_name LIKE $1;'
+
+                this.pool.query(queryString, ['%' + opts['iName'] + '%'], function(err, res)
+                {
+                    return done(err, res)
+                });
+            }
+        }
+        else
+        {
+            this.pool.query('SELECT * FROM vendor;', function(err, res)
+            {
+                return done(err, res);
+            });
+        }
+    }
+
     //This function inserts a new material request into the database.
     requestMaterials(matId, description, comment, quantity, uom, batchNum, source, destination, transNum,
         thawReq, refreezeDate, dateReq, requester, requsterId, done)

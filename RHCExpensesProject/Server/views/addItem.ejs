@@ -3,6 +3,7 @@
 <head>
     <title>User Creation</title>
     <link rel="stylesheet" type="text/css" href="/css/addNewUser.css" />
+    <link rel="stylesheet" type="text/css" href="/css/addItem.css" />
     <link rel="shortcut icon" href="/graphics/favicon.png" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="/scripts/addNewUser.js"></script>
@@ -13,21 +14,33 @@
 
             <div class="createForm">
                 <img class="rhcLogo" src="/graphics/rhc_logo_color.png" width="25%" height="25%"/>
-                <h1>Add New Vendor</h1>
-                <form class="newUserForm" action="/main/admin/addNewVendor" method="post" autocomplete="off">
+                <h1>Add Item</h1>
+                <form class="newUserForm" action="/main/addItem" method="post" autocomplete="off">
                     <input type="text" name="name" placeholder="Enter Item Name" autofocus required />
                     <p></p>
+
+                    <label>Vendor</label>
+                    <select name="vId" required>
+                        <option value="" disabled selected="selected">Select a vendor--</option> 
+                        <% for (var i = 0; i < vendArr.length; i++) { %>
+                            <option value="<%= vendNumArr[i] %>"><%= vendArr[i] %></option> 
+                        <%}%>
+                    </select>
+                    <p></p>
                     
-                    <input type="text" name="address" placeholder="Enter Street Address" required />
+                    <input type="text" class=".currencyInput" name="price" placeholder="Item Price" required />
                     <p></p>
 
-                    <input type="text" name="zip" placeholder="Zip Code" required />
+                    <input type="text" name="desc" placeholder="Item Description" required />
                     <p></p>
                     
-                    <input type="text" name="terms" placeholder="Payment Terms" required />
+                    <input type="number" name="min_quan" placeholder="Min quantity to order" />
                     <p></p>
 
-                    <input class="submit" type="submit" name="loginBtn" value="Create Vendor"/>
+                    <input type="number" name="max_quan" placeholder="Max quantity to order" />
+                    <p></p>
+
+                    <input class="submit" type="submit" name="itemBtn" value="Add Item"/>
                 </form>
             </div>
         </div>

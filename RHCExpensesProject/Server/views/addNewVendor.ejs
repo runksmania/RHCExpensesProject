@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>User Creation</title>
+    <title>Add New Vendor</title>
     <link rel="stylesheet" type="text/css" href="/css/addNewUser.css" />
     <link rel="stylesheet" type="text/css" href="/css/basicResultsTable.css" />
     <link rel="shortcut icon" href="/graphics/favicon.png" />
@@ -14,8 +14,8 @@
 
             <div class="createForm">
                 <img class="rhcLogo" src="/graphics/rhc_logo_color.png" width="25%" height="25%"/>
-                <h1>Vendors</h1>
-                <form class="newUserForm" action="/main/admin/addNewVendor" method="post" autocomplete="off">
+                <h1>Add New Vendor</h1>
+                <form class="newUserForm" action="/main/addNewVendor" method="post" autocomplete="off">
                     <input type="text" name="name" placeholder="Enter Vendor Name" autofocus required />
                     <p></p>
                     
@@ -28,25 +28,9 @@
                     <input type="text" name="terms" placeholder="Payment Terms" required />
                     <p></p>
 
-                    <input class="submit" type="submit" name="saveBtn" value="Save"/>
+                    <input class="submit" type="submit" name="submitBtn" value="Submit"/>
                 </form>
             </div>
-
-            <form>
-                <table cellpadding="0" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>Vendor Name</th>
-                            <th>Street Address</th>
-                            <th>Zip Code</th>
-                            <th>Payment Terms</th>
-                        </tr>
-                        <tbody>
-                        </tbody>
-                    </thead>
-                </table>
-            </form>
-
         </div>
     </div>
 
