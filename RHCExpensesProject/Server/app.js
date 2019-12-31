@@ -484,7 +484,7 @@ app.get('/main/vendors', (req, res) =>
 {
     if (req.session && req.session.user && req.session.user.resetPass != true)
     {
-        dbhandler.vendorQuery(function (err, result)
+        dbhandler.vendorQuery({}, function (err, result)
         {
             if (err)
             {
