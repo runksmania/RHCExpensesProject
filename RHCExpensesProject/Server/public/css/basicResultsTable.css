@@ -15,9 +15,40 @@ h2 {
     border-collapse: collapse;
 }
 
+table {
+    border: solid black 2px;
+    border-radius: 15px;
+    white-space: nowrap;    
+}
+
 th {
     border: 1px solid black;
     border-collapse: collapse;
+    border-top: none;
+    padding: 2px;
+}
+
+th:first-child {
+    border-left: none;
+    border-top: none;
+}
+
+th:first-child {
+    border-left: none;
+    border-top: none;
+}
+
+th:last-child {
+    border-right: none;
+}
+
+td:first-child {
+    border-left: none;
+}
+
+td:last-child {
+    border-bottom: none;
+    border-right: none;
 }
 
 .fixedHeader thead {
@@ -27,13 +58,12 @@ th {
 
 tbody td {
     width: 1%;
-    text-wrap: none;
     border: 1px solid black;
-    border-collapse: collapse;
+    border-bottom: none;
 }
 
 tbody tr:nth-child(even) {
-    background-color: rgb(223, 193, 193);
+    background-color: lightgrey;
 }
 
 .textInput {

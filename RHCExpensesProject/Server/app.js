@@ -459,6 +459,10 @@ app.get('/main/searchRequests/?*', [body('query.search').trim().escape()], (req,
             }
 
         });
+
+        logger.debug(req.query.search);
+
+        res.send([]);
     }
     else
     {
@@ -504,6 +508,33 @@ app.get('/main/vendors', (req, res) =>
     else
     {
         res.redirect('/');
+    }
+});
+
+app.get('/main/vendors/search/?*', [body('query.search').trim().escape()], (req, res) =>
+{
+    if (req.session && req.session.user && req.session.user.resetPass != true)
+    {
+        dbhandler.vendorQuery(req.query, function (err, result)
+        {
+            if (err)
+            {
+                logger.error(err);
+                var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
+                    + ' should this issue persist.';
+                req.flash('info', 'requestError');
+                req.flash('requestError', flashMessage);
+                res.redirect('/');
+            }
+            else
+            {
+                res.send(result.rows);
+            }
+        });
+    }
+    else
+    {
+        res.send([]);
     }
 });
 

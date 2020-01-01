@@ -6,11 +6,11 @@ $(document).ready(function ()
     $('.info').hover(
         function ()
         {
-            $('.tooltip').show();
+            $('.tooltip').css('opacity', '100');
         },
         function ()
         {
-            $('.tooltip').hide();
+            $('.tooltip').css('opacity', '0');
         }
     );
 
@@ -29,12 +29,17 @@ $(document).ready(function ()
     //Sends ajax request to server with user's input and gets the results.
     function searchRequests(searchInput)
     {
-        var urlString = window.location.pathname + '/search'; 
+        var urlString = window.location.pathname + '/search';
+        
+        if ($('#parameters').val() == null)
+        {
+            $('#parameters').val('');
+        }
 
         $.ajax({
             method: "get",
             url: urlString,
-            data: { search: searchInput }
+            data: { narrow: $('#parameters').val(), search: searchInput }
         })
             .done(function (result)
             {
@@ -46,7 +51,6 @@ $(document).ready(function ()
     //Takes search results and updates the table with results.
     function updateTable(searchResults)
     {
-
         if (searchResults[0] == null)
         {
             //If nothing was found shake and reshow no .noResults to user.
@@ -67,8 +71,10 @@ $(document).ready(function ()
                 
                 for(var property in searchResults[i])
                 {
-
-                    tableRowString += '<td>' + searchResults[i][property] + '</td>\n';
+                    if(property != 'vendor_id')
+                    {
+                        tableRowString += '<td>' + searchResults[i][property] + '</td>\n';
+                    }
                 }
                 
                 tableRowString += '</tr>\n';

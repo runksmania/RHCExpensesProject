@@ -219,48 +219,67 @@ module.exports = class DatabaseHandler
 
     //This functions grabs all vendors if no options. Query will search for partial matches.
     //Options:
-    //  vName: Search by vendor name.
-    //  iName: Search by vendors with item name.
-    //  Both:  Include vName and iname to search by vendors with item Name.
+    //  vName:          Search by vendor name.
+    //  iName:          Search by vendors with item name.
+    //  City:           Search by vendors city.
+    //  Payment Terms:  Search vendors by payment terms.
     vendorQuery(opts, done)
     {
-        if (opts['vName'] || opts['iName'])
+        if (opts['narrow'] != null)
         {
-            if (opts['vName'] && opts['iName'])
-            {
-                var queryStsring = 'SELECT *\n'
-                + 'FROM vendor v, item i\n'
-                + 'WHERE v.vendor_id = i.vendor_id\n' 
-                    + 'AND v.vendor_name LIKE $1\n'
-                    + 'AND i.item_name LIKE $2;'
+            var queryString = ''
 
-                this.pool.query(queryString, ['%' + opts['vName'] + '%', '%' + opts['iName'] + '%'], function(err, res)
-                {
-                    return done(err, res)
-                });
-            }
-            else if (opts['vName'])
+            switch (opts['narrow'])
             {
-                var queryString = 'SELECT *\n'
-                    + 'FROM vendor v\n'
-                    + 'WHERE v.vendor_name LIKE $1;'
+                case '':
+                    queryString = 'SELECT v.vendor_id, vendor_name, vendor_address,\n'
+                        + 'vendor_city, vendor_state, vendor_zip, payment_terms\n'
+                        + 'FROM vendor v, item i\n'
+                        + 'WHERE v.vendor_name ILIKE $1\n'
+                            + 'OR i.item_name ILIKE $1\n'
+                            + 'OR v.vendor_city ILIKE $1\n'
+                            + 'OR v.payment_terms ILIKE $1\n'
+                            + 'AND v.vendor_id = i.vendor_id;';
+                    break;
 
-                this.pool.query(queryString, ['%' + opts['vName'] + '%'], function(err, res)
-                {
-                    return done(err, res)
-                });
+                case '1':
+                    queryString = 'SELECT v.vendor_id, vendor_name, vendor_address,\n'
+                        + 'vendor_city, vendor_state, vendor_zip, payment_terms\n'
+                        + 'FROM vendor v\n'
+                        + 'WHERE v.vendor_name ILIKE $1;';
+                    break;
+                    
+                case '2':
+                    queryString = 'SELECT v.vendor_id, vendor_name, vendor_address,\n'
+                        + 'vendor_city, vendor_state, vendor_zip, payment_terms\n'
+                        + 'FROM vendor v, item i\n'
+                        + 'WHERE i.item_name ILIKE $1\n'
+                            + 'AND v.vendor_id = i.vendor_id;';
+                    break;
+
+                case '3':
+                    queryString = 'SELECT v.vendor_id, vendor_name, vendor_address,\n'
+                        + 'vendor_city, vendor_state, vendor_zip, payment_terms\n'
+                        + 'FROM vendor v\n'
+                        + 'WHERE v.vendor_city ILIKE $1;'
+                    break;       
+                            
+                case '4':
+                    queryString = 'SELECT v.vendor_id, vendor_name, vendor_address,\n'
+                        + 'vendor_city, vendor_state, vendor_zip, payment_terms\n'
+                        + 'FROM vendor v\n'
+                        + 'WHERE v.payment_terms ILIKE $1;'
+                    break;
+
+                default:
+                    return done(new error('No determinable search parameters found.'), null);
+                
             }
-            else 
+
+            this.pool.query(queryString, ['%' + opts['search'] + '%'], function(err, res)
             {
-                var queryString = 'SELECT *\n'
-                    + 'FROM vendor v, item i\n'
-                    + 'WHERE v.vendor_id = i.vendor_id AND i.item_name LIKE $1;'
-
-                this.pool.query(queryString, ['%' + opts['iName'] + '%'], function(err, res)
-                {
-                    return done(err, res)
-                });
-            }
+                return done(err, res);
+            });
         }
         else
         {
