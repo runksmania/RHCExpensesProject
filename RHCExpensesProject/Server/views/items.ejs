@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= vName %> Items</title>
+    <link rel="stylesheet" type="text/css" href="/css/vendors.css" />
+    <link rel="stylesheet" type="text/css" href="/css/basicResultsTable.css" />
+    <link rel="stylesheet" type="text/css" href="/css/search.css" />
+    <link rel="shortcut icon" href="/graphics/favicon.png" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+    <script src="/scripts/addNewUser.js"></script>
+    <script src="/scripts/search.js"></script>
+</head>
+<body>
+
+    <p class="noResults" style="display:none">Nothing was found with those parameters. Please try again</p>
+
+    <div class="sidePanelWrapper">
+        <h2><%= vName.toUpperCase() %> ITEMS</h2>
+        <h2 style="display: none;"><%= vName %> Contacts</h2>
+
+        <span class="tooltip" style="opacity: 0;">Search by Item Name, or Price</span>
+
+        <div class="contentWrapper">
+
+            <div class="searchUi">
+
+                <label>Search Parameters</label>
+                <select id="parameters">
+                    <option value="" selected="true">Get All Items</option>
+                    <option value="2">Item Name</option>
+                    <option value="3">Price</option>
+                </select>
+
+                <div class="searchWrapper">
+                    <input class="searchField" type="search" placeholder="Search Items" name="search" />
+                </div>
+
+                <div class="info">?</div>
+
+            </div>
+
+            <div class="itemsView">
+                <div class="resultsTable">
+                    <div class="content">
+                    
+                        <form>
+                            <table cellpadding="0" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Item Name</th>
+                                        <th>Item Desc</th>
+                                        <th>Item Price</th> 
+                                        <th>Min Quantity</th>
+                                        <th>Max Quantity</th>
+                                    </tr>
+                                    <tbody>
+                                        <% for (var i = 0; i < items.length; i++) { %>
+                                            <tr>
+                                                <% for (var property in items[i]) { %>
+                                                    <% if (property != 'item_num') { %>
+                                                        <td><input type="text" name="<%= property %>" value="<%= items[i][property] %>"/></td>
+                                                    <% } else { %>
+                                                        <td name="<%= property %>" style="display: none;"><%= items[i][property] %></td>
+                                                    <% } %>
+                                                <% } %>
+                                            </tr>
+                                        <% } %>
+                                    </tbody>
+                                </thead>
+                            </table>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <a href="logout">Logout</a>
+</body>
+</html>

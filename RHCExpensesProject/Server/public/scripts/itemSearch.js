@@ -69,11 +69,18 @@ $(document).ready(function ()
             {
                 tableRowString += '<tr>\n';
                 
-                for(var property in searchResults[i])
+                for (var property in searchResults[i])
                 {
-                    if(property != 'vendor_id')
+                    if (property != 'item_num')
                     {
-                        tableRowString += '<td>' + searchResults[i][property] + '</td>\n';
+                        tableRowString += '<td>' + '<input type="text" name="' + property + '" value="'
+                            + searchResults[i][property] + '"></td>\n';
+                    }
+                    else 
+                    {
+                        tableRowString += '<td style="display: none;">' + '<input type="text" name="' 
+                            + property + '" value="'
+                            + searchResults[i][property] + '"></td>\n';
                     }
                 }
                 

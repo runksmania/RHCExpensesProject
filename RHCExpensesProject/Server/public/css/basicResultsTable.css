@@ -16,7 +16,7 @@ h2 {
 }
 
 table {
-    border: solid black 2px;
+    border: solid black 3px;
     border-radius: 15px;
     white-space: nowrap;    
 }
@@ -24,12 +24,6 @@ table {
 th {
     border: 1px solid black;
     border-collapse: collapse;
-    border-top: none;
-    padding: 2px;
-}
-
-th:first-child {
-    border-left: none;
     border-top: none;
 }
 
@@ -57,7 +51,7 @@ td:last-child {
 }
 
 tbody td {
-    width: 1%;
+    width: 100%;
     border: 1px solid black;
     border-bottom: none;
 }
@@ -66,10 +60,9 @@ tbody tr:nth-child(even) {
     background-color: lightgrey;
 }
 
-.textInput {
-    width: 50px;
-}
-
 input {
     font: 400 13.3333px Arial;
+    border: none;
+    margin: 0;
+    padding: 0;
 }

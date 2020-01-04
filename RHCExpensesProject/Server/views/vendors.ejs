@@ -9,7 +9,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
     <script src="/scripts/addNewUser.js"></script>
-    <script src="/scripts/search.js"></script>
+    <script src="/scripts/vendorSearch.js"></script>
 </head>
 <body>
 
@@ -26,14 +26,14 @@
                 <label>Search Parameters</label>
                 <select id="parameters">
                     <option value="" selected="true">Search By All</option>
-                    <option value="1">Vendor Name</option>
-                    <option value="2">Item Name</option>
-                    <option value="3">City</option>
-                    <option value="4">Payment Terms</option>
+                    <option value="2">Vendor Name</option>
+                    <option value="3">Item Name</option>
+                    <option value="4">City</option>
+                    <option value="5">Payment Terms</option>
                 </select>
 
                 <div class="searchWrapper">
-                    <input class="searchField" type="search" placeholder="Search requests" name="search" />
+                    <input class="searchField" type="search" placeholder="Search Vendors" name="search" />
                 </div>
 
                 <div class="info">?</div>
@@ -57,12 +57,15 @@
                                 <tbody>
                                     <% for (var i = 0; i < vendors.length; i++) { %>
                                         <tr>
-                                            <td><%= vendors[i].vendor_name %></td>
-                                            <td><%= vendors[i].vendor_address %></td>
-                                            <td><%= vendors[i].vendor_city%></td>
-                                            <td><%= vendors[i].vendor_state %></td>
-                                            <td><%= vendors[i].vendor_zip %></td>
-                                            <td><%= vendors[i].payment_terms %></td>
+                                            <% for (var property in vendors[i]) { %>
+                                                <% if (property != 'vendor_id' && property != 'vendor_name') { %>
+                                                    <td><input type="text" name="<%= property %>" value="<%= vendors[i][property] %>"/></td>
+                                                <% } else if (property == 'vendor_name') { %>
+                                                    <td><a href="/main/vendors/id/<%= vendors[i]['vendor_id'] %>/name/<%=vendors[i][property] %>"><%= vendors[i][property] %></a></td>
+                                                <% } else { %>
+                                                    <td name="<%= property %>" style="display: none;"><%= vendors[i][property] %></td>
+                                                <% } %>
+                                            <% } %>
                                         </tr>
                                     <% } %>
                                 </tbody>

@@ -219,6 +219,7 @@ module.exports = class DatabaseHandler
 
     //This functions grabs all vendors if no options. Query will search for partial matches.
     //Options:
+    //  vId:            Search by vendor Id.
     //  vName:          Search by vendor name.
     //  iName:          Search by vendors with item name.
     //  City:           Search by vendors city.
@@ -244,12 +245,18 @@ module.exports = class DatabaseHandler
 
                 case '1':
                     queryString = 'SELECT v.vendor_id, vendor_name, vendor_address,\n'
+                    + 'vendor_city, vendor_state, vendor_zip, payment_terms\n'
+                    + 'FROM vendor v\n'
+                    + 'WHERE v.vendor_id = $1;';
+
+                case '2':
+                    queryString = 'SELECT v.vendor_id, vendor_name, vendor_address,\n'
                         + 'vendor_city, vendor_state, vendor_zip, payment_terms\n'
                         + 'FROM vendor v\n'
                         + 'WHERE v.vendor_name ILIKE $1;';
                     break;
                     
-                case '2':
+                case '3':
                     queryString = 'SELECT v.vendor_id, vendor_name, vendor_address,\n'
                         + 'vendor_city, vendor_state, vendor_zip, payment_terms\n'
                         + 'FROM vendor v, item i\n'
@@ -257,14 +264,14 @@ module.exports = class DatabaseHandler
                             + 'AND v.vendor_id = i.vendor_id;';
                     break;
 
-                case '3':
+                case '4':
                     queryString = 'SELECT v.vendor_id, vendor_name, vendor_address,\n'
                         + 'vendor_city, vendor_state, vendor_zip, payment_terms\n'
                         + 'FROM vendor v\n'
                         + 'WHERE v.vendor_city ILIKE $1;'
                     break;       
                             
-                case '4':
+                case '5':
                     queryString = 'SELECT v.vendor_id, vendor_name, vendor_address,\n'
                         + 'vendor_city, vendor_state, vendor_zip, payment_terms\n'
                         + 'FROM vendor v\n'
@@ -272,7 +279,7 @@ module.exports = class DatabaseHandler
                     break;
 
                 default:
-                    return done(new error('No determinable search parameters found.'), null);
+                    return done(new Error('No determinable search parameters found.'), null);
                 
             }
 
@@ -284,6 +291,84 @@ module.exports = class DatabaseHandler
         else
         {
             this.pool.query('SELECT * FROM vendor;', function(err, res)
+            {
+                return done(err, res);
+            });
+        }
+    }
+
+    //This functions grabs all items from vendor specified if no options. Query will search for partial matches.
+    //Options:
+    //  itemId: Search by item id.
+    //  iName:  Search by item name.
+    //  Price:  Search by item price.
+    specificVendorItemQuery(opts, vId, done)
+    {
+        if (opts['narrow'] != null)
+        {
+            var queryString = ''
+
+            switch (opts['narrow'])
+            {
+                case '':
+                    queryString = 'SELECT item_num, item_name, item_desc, item_price,\n'
+                        + 'min_quan, max_quan\n'
+                        + 'FROM item i\n'
+                        + 'WHERE vendor_id = $1;';
+                    
+                    this.pool.query(queryString, [vId], function(err, res)
+                    {
+                        return done(err, res);
+                    });
+                    
+                    break;
+
+                case '1':
+                    queryString = 'SELECT item_num, item_name, item_desc, item_price,\n'
+                        + 'min_quan, max_quan\n'
+                        + 'FROM item i\n'
+                        + 'WHERE vendor_id = $1\n and item_num = $2;';
+
+                    this.pool.query(queryString, [vId, opts['search']], function(err, res)
+                    {
+                        return done(err, res);
+                    });
+                    break;
+
+                case '2':
+                    queryString = 'SELECT item_num, item_name, item_desc, item_price,\n'
+                        + 'min_quan, max_quan\n'
+                        + 'FROM item i\n'
+                        + 'WHERE vendor_id = $1\n and item_name = $2;';
+
+                    this.pool.query(queryString, [vId, '%' + opts['search'] + '%'], function(err, res)
+                    {
+                        return done(err, res);
+                    });
+                    break;
+                    
+                case '3':
+                    queryString = 'SELECT item_num, item_name, item_desc, item_price,\n'
+                        + 'min_quan, max_quan\n'
+                        + 'FROM item i\n'
+                        + 'WHERE vendor_id = $1\n and item_price = $2;';
+
+                    this.pool.query(queryString, [vId, opts['search']], function(err, res)
+                    {
+                        return done(err, res);
+                    });
+                    break;
+
+                default:
+                    return done(new Error('No determinable search parameters found.'), null);
+                
+            }
+        }
+        else
+        {
+            this.pool.query('SELECT SELECT item_num, item_name, item_desc, item_price,\n'
+                + 'min_quan, max_quan\n'
+                + 'FROM item;', function(err, res)
             {
                 return done(err, res);
             });
