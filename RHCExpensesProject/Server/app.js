@@ -528,7 +528,6 @@ app.get('/main/vendors/id/:vId/Name/:vName', (req, res) =>
             }
             else
             {
-                logger.debug(result);
                 res.render('items', {'vName': req.params.vName, 'vId': req.params.vId, 'items' : result.rows});
             }         
         });
@@ -548,11 +547,30 @@ app.get('/main/vendors/search/?*', [body('query.search').trim().escape()], (req,
             if (err)
             {
                 logger.error(err);
-                var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
-                    + ' should this issue persist.';
-                req.flash('info', 'requestError');
-                req.flash('requestError', flashMessage);
-                res.redirect('/');
+                res.send([]);
+            }
+            else
+            {
+                res.send(result.rows);
+            }
+        });
+    }
+    else
+    {
+        res.send([]);
+    }
+});
+
+app.get('/items/search/vendor/:vId', (req, res) => 
+{
+    if (req.session && req.session.user && req.session.user.resetPass != true)
+    {
+        dbhandler.specificVendorItemQuery(req.query, req.params.vId, function (err, result)
+        {
+            if (err)
+            {
+                logger.error(err);
+                res.send([])
             }
             else
             {

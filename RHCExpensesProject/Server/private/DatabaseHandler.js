@@ -311,62 +311,63 @@ module.exports = class DatabaseHandler
             switch (opts['narrow'])
             {
                 case '':
+
+                    //Due to switch and callbacks need to provide a second argument for
+                    //  this query to work properly.
                     queryString = 'SELECT item_num, item_name, item_desc, item_price,\n'
                         + 'min_quan, max_quan\n'
-                        + 'FROM item i\n'
-                        + 'WHERE vendor_id = $1;';
-                    
-                    this.pool.query(queryString, [vId], function(err, res)
-                    {
-                        return done(err, res);
-                    });
-                    
+                        + 'FROM item\n'
+                        + 'WHERE vendor_id = $1 AND item_name ILIKE $2;';
+                    Object.assign(opts, {'search': ''});
                     break;
 
                 case '1':
                     queryString = 'SELECT item_num, item_name, item_desc, item_price,\n'
                         + 'min_quan, max_quan\n'
-                        + 'FROM item i\n'
-                        + 'WHERE vendor_id = $1\n and item_num = $2;';
-
-                    this.pool.query(queryString, [vId, opts['search']], function(err, res)
-                    {
-                        return done(err, res);
-                    });
+                        + 'FROM item\n'
+                        + 'WHERE vendor_id = $1 AND item_num = $2;';
                     break;
 
                 case '2':
                     queryString = 'SELECT item_num, item_name, item_desc, item_price,\n'
                         + 'min_quan, max_quan\n'
-                        + 'FROM item i\n'
-                        + 'WHERE vendor_id = $1\n and item_name = $2;';
-
-                    this.pool.query(queryString, [vId, '%' + opts['search'] + '%'], function(err, res)
-                    {
-                        return done(err, res);
-                    });
+                        + 'FROM item\n'
+                        + 'WHERE vendor_id = $1 AND item_name ILIKE $2;';
                     break;
                     
                 case '3':
+                    var num = opts['search'];
                     queryString = 'SELECT item_num, item_name, item_desc, item_price,\n'
                         + 'min_quan, max_quan\n'
-                        + 'FROM item i\n'
-                        + 'WHERE vendor_id = $1\n and item_price = $2;';
-
-                    this.pool.query(queryString, [vId, opts['search']], function(err, res)
-                    {
-                        return done(err, res);
-                    });
+                        + 'FROM item\n'
+                        + 'WHERE vendor_id = $1 AND\n'
+                            + 'item_price BETWEEN ' + num + ' AND ' + (parseInt(num) + 1) + ';';
                     break;
 
                 default:
                     return done(new Error('No determinable search parameters found.'), null);
                 
             }
+
+            if (opts['narrow'] == '3')
+            {
+                //Price searching needs its own special query.
+                this.pool.query(queryString, [vId], function(err, res)
+                {
+                    return done(err, res);
+                });
+            }
+            else
+            {
+                this.pool.query(queryString, [vId, '%' + opts['search'] + '%'], function(err, res)
+                {
+                    return done(err, res);
+                });
+            }
         }
         else
         {
-            this.pool.query('SELECT SELECT item_num, item_name, item_desc, item_price,\n'
+            this.pool.query('SELECT item_num, item_name, item_desc, item_price,\n'
                 + 'min_quan, max_quan\n'
                 + 'FROM item;', function(err, res)
             {

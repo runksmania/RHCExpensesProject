@@ -3,7 +3,7 @@
    Author: Michael Cottrell
 */
 
-delete from emp;
+DELETE FROM emp;
 
 INSERT INTO emp
 VALUES

@@ -29,11 +29,17 @@ $(document).ready(function ()
     //Sends ajax request to server with user's input and gets the results.
     function searchRequests(searchInput)
     {
-        var urlString = window.location.pathname + '/search';
+        var urlString = window.location.origin + '/items/search/vendor/' + $('.vendorId').val();
         
         if ($('#parameters').val() == null)
         {
             $('#parameters').val('');
+        }
+        else if ($('#parameters').val() == '3' && (isNaN(searchInput) || searchInput == ''))
+        {
+            //If searching by price with invalid number return no results.
+            updateTable([]);
+            return;
         }
 
         $.ajax({

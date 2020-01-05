@@ -1,5 +1,5 @@
 /* RHC Expenses Project Database Table Creation File
-   Last modified: 12-26-19
+   Last modified: 1-5-20
    Author: Michael Cottrell
 */
 
@@ -11,7 +11,7 @@ CREATE TABLE vendor
 (
     vendor_id       SERIAL UNIQUE,
     vendor_name     VARCHAR(50)  NOT NULL,
-    vendor_address  VARCHAR(50)  NOT NULL,
+    vendor_address  VARCHAR(100)  NOT NULL,
     vendor_city     VARCHAR(30)  NOT NULL,
     vendor_state    VARCHAR(2)   NOT NULL,
     vendor_zip      VARCHAR(10)  NOT NULL,
@@ -62,7 +62,7 @@ create TABLE item
     item_num     SERIAL PRIMARY KEY,
     item_name    VARCHAR(50) NOT NULL,
     vendor_id    INTEGER REFERENCES vendor(vendor_id),
-    item_price   MONEY NOT NULL,
+    item_price   NUMERIC(16,2) NOT NULL,
     item_desc    VARCHAR(100) NOT NULL,
     min_quan     INTEGER,
     max_quan     INTEGER

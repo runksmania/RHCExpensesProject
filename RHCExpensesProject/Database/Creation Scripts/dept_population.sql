@@ -3,7 +3,7 @@
    Author: Michael Cottrell
 */
 
-delete from dept;
+DELETE FROM dept;
 
 INSERT INTO dept
 VALUES
