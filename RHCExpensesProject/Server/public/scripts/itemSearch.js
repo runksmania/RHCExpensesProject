@@ -2,18 +2,6 @@
 
 $(document).ready(function ()
 {
-    //Show tooltip for what search parameters are used in search bar.
-    $('.info').hover(
-        function ()
-        {
-            $('.tooltip').css('opacity', '100');
-        },
-        function ()
-        {
-            $('.tooltip').css('opacity', '0');
-        }
-    );
-
     //Keypress event for enter. Passes value of search input to method that handles ajax query.
     $('.searchField').keypress(function (e)
     {
@@ -26,6 +14,52 @@ $(document).ready(function ()
         }
     });
 
+    //Keypress event for enter. Passes value of search input to method that handles ajax query.
+    $('.minRange').keypress(function (e)
+    {
+        var key = e.keycode || e.which;
+
+        //Check if key == enter.
+        if (key == 13)
+        {
+            var minVal = $(this).val();
+            var maxVal = $('.maxRange').val();
+
+            if (!isNaN(minVal) && !isNaN(maxVal))
+            {
+                $('.invalidInput').css('opacity', '0');
+                searchRequests(minVal + ' ' + maxVal);
+            }
+            else 
+            {
+                $('.invalidInput').css('opacity', '1');
+            }
+        }
+    });
+
+    //Keypress event for enter. Passes value of search input to method that handles ajax query.
+    $('.maxRange').keypress(function (e)
+    {
+        var key = e.keycode || e.which;
+
+        //Check if key == enter.
+        if (key == 13)
+        {
+            var maxVal = $(this).val();
+            var minVal = $('.minRange').val();
+
+            if (!isNaN(minVal) && !isNaN(maxVal))
+            {
+                $('.invalidInput').css('opacity', '0');
+                searchRequests(minVal + ' ' + maxVal);
+            }
+            else 
+            {
+                $('.invalidInput').css('opacity', '1');
+            }
+        }
+    });
+
     //Sends ajax request to server with user's input and gets the results.
     function searchRequests(searchInput)
     {
@@ -34,12 +68,6 @@ $(document).ready(function ()
         if ($('#parameters').val() == null)
         {
             $('#parameters').val('');
-        }
-        else if ($('#parameters').val() == '3' && (isNaN(searchInput) || searchInput == ''))
-        {
-            //If searching by price with invalid number return no results.
-            updateTable([]);
-            return;
         }
 
         $.ajax({
@@ -53,6 +81,23 @@ $(document).ready(function ()
             });
     }
 
+    $('#parameters').change(function()
+    {
+        var val = $(this).val();
+
+        if (val == '3')
+        {
+            $('.searchWrapper').hide();
+            $('.minRange').show();
+            $('.maxRange').show();
+        }
+        else
+        {
+            $('.minRange').hide();
+            $('.maxRange').hide();
+            $('.searchWrapper').show();
+        }
+    });
 
     //Takes search results and updates the table with results.
     function updateTable(searchResults)

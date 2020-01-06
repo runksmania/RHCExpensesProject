@@ -1,0 +1,20 @@
+.numberParameters input {
+    border: 1px solid #8f8f8f;
+    background: transparent;
+    outline: none;
+    height: 30px;
+    color: #333;
+    font: 400, 13.3333px, Arial;
+    font-weight: bold;
+    line-height: 15px;
+    margin: 10px 10px 30px 10px;
+    text-indent: 5px;
+}
+
+.numberParameters input:focus {
+    box-shadow: 0 0 10px rgba(255, 0, 0, 1);
+}
+
+.numberParameters {
+    display: inline;
+}

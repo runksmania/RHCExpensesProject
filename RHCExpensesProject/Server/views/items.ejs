@@ -5,6 +5,7 @@
     <link rel="stylesheet" type="text/css" href="/css/vendors.css" />
     <link rel="stylesheet" type="text/css" href="/css/basicResultsTable.css" />
     <link rel="stylesheet" type="text/css" href="/css/search.css" />
+    <link rel="stylesheet" type="text/css" href="/css/item.css" />
     <link rel="shortcut icon" href="/graphics/favicon.png" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
@@ -13,13 +14,12 @@
 </head>
 <body>
     <input class="vendorId" value="<%= vId %>" style="display: none;"/>
+    <p class="invalidInput" style="opacity: 0;">Invalid input. Please type a valid number.</p>
     <p class="noResults" style="display:none">Nothing was found with those parameters. Please try again</p>
 
     <div class="sidePanelWrapper">
         <h2><%= vName.toUpperCase() %> ITEMS</h2>
         <h2 style="display: none;"><%= vName %> Contacts</h2>
-
-        <span class="tooltip" style="opacity: 0;">Search by Item Name, or Price</span>
 
         <div class="contentWrapper">
 
@@ -36,7 +36,10 @@
                     <input class="searchField" type="search" placeholder="Search Items" name="search" />
                 </div>
 
-                <div class="info">?</div>
+                <div class="numberParameters">
+                    <input class="minRange" type="text" placeholder="Min Range" style="display: none;">
+                    <input class="maxRange" type="text" placeholder="Max Range" style="display: none;">
+                </div>
 
             </div>
 

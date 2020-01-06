@@ -336,12 +336,20 @@ module.exports = class DatabaseHandler
                     break;
                     
                 case '3':
-                    var num = opts['search'];
+                    var nums = opts['search'].split(' ');                    
+
+                    //Change max value by 1 to allow for integer change to be accounted for
+                    //  in precise lookup.
+                    if (nums[0] === nums[1])
+                    {
+                        nums[1] = parseInt(nums[1]) + 1; 
+                    }
+
                     queryString = 'SELECT item_num, item_name, item_desc, item_price,\n'
                         + 'min_quan, max_quan\n'
                         + 'FROM item\n'
                         + 'WHERE vendor_id = $1 AND\n'
-                            + 'item_price BETWEEN ' + num + ' AND ' + (parseInt(num) + 1) + ';';
+                            + 'item_price BETWEEN ' + nums[0] + ' AND ' + nums[1] + ';';
                     break;
 
                 default:
