@@ -14,6 +14,14 @@ $(document).ready(function ()
         }
     });
 
+    function validateNumbers (val1, val2)
+    {
+        var isNum = !isNaN(val1) && !isNaN(val2);
+        var bothEmpty = !(val1 == val2) && (val2 == '' || val1 == '');
+
+        return isNum && bothEmpty;
+    }
+
     //Keypress event for enter. Passes value of search input to method that handles ajax query.
     $('.minRange').keypress(function (e)
     {
@@ -25,8 +33,20 @@ $(document).ready(function ()
             var minVal = $(this).val();
             var maxVal = $('.maxRange').val();
 
-            if (!isNaN(minVal) && !isNaN(maxVal))
+            if (validateNumbers(minVal, maxVal))
             {
+                if (minVal == '')
+                {
+                    minVal = '0';
+                    alert(minVal);
+                }
+
+                if (maxVal == '')
+                {
+                    maxVal = '1000000000';
+                    alert(maxVal);
+                }
+
                 $('.invalidInput').css('opacity', '0');
                 searchRequests(minVal + ' ' + maxVal);
             }
@@ -48,8 +68,20 @@ $(document).ready(function ()
             var maxVal = $(this).val();
             var minVal = $('.minRange').val();
 
-            if (!isNaN(minVal) && !isNaN(maxVal))
+            if (validateNumbers(minVal, maxVal))
             {
+                if (minVal == '')
+                {
+                    minVal = '0';
+                    alert(minVal);
+                }
+
+                if (maxVal == '')
+                {
+                    maxVal = '1000000000';
+                    alert(maxVal);
+                }
+
                 $('.invalidInput').css('opacity', '0');
                 searchRequests(minVal + ' ' + maxVal);
             }

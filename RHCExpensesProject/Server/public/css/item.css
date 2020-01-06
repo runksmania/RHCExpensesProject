@@ -18,3 +18,7 @@
 .numberParameters {
     display: inline;
 }
+
+.invalidInput {
+    color: red;
+}
