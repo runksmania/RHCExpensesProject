@@ -7,8 +7,9 @@
     font: 400, 13.3333px, Arial;
     font-weight: bold;
     line-height: 15px;
-    margin: 10px 10px 30px 10px;
+    margin: 10px 10px 35px 15px;
     text-indent: 5px;
+    width: 10%;
 }
 
 .numberParameters input:focus {

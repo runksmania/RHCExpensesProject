@@ -17,9 +17,9 @@ $(document).ready(function ()
     function validateNumbers (val1, val2)
     {
         var isNum = !isNaN(val1) && !isNaN(val2);
-        var bothEmpty = !(val1 == val2) && (val2 == '' || val1 == '');
+        var bothEmpty = val1 == val2 && (val2 == '' || val1 == '');
 
-        return isNum && bothEmpty;
+        return isNum && !bothEmpty;
     }
 
     //Keypress event for enter. Passes value of search input to method that handles ajax query.
@@ -38,13 +38,11 @@ $(document).ready(function ()
                 if (minVal == '')
                 {
                     minVal = '0';
-                    alert(minVal);
                 }
 
                 if (maxVal == '')
                 {
                     maxVal = '1000000000';
-                    alert(maxVal);
                 }
 
                 $('.invalidInput').css('opacity', '0');
@@ -73,13 +71,11 @@ $(document).ready(function ()
                 if (minVal == '')
                 {
                     minVal = '0';
-                    alert(minVal);
                 }
 
                 if (maxVal == '')
                 {
                     maxVal = '1000000000';
-                    alert(maxVal);
                 }
 
                 $('.invalidInput').css('opacity', '0');
@@ -119,15 +115,24 @@ $(document).ready(function ()
 
         if (val == '3')
         {
-            $('.searchWrapper').hide();
+            $('.searchWrapper').width(0);
+            $('.searchWrapper').css('visibility', 'hidden');
             $('.minRange').show();
             $('.maxRange').show();
+        }
+        else if (val == '')
+        {
+            $('.searchWrapper').width('auto');
+            $('.searchWrapper').css('visibility', 'hidden');
+            $('.minRange').hide();
+            $('.maxRange').hide();
         }
         else
         {
             $('.minRange').hide();
             $('.maxRange').hide();
-            $('.searchWrapper').show();
+            $('.searchWrapper').width('auto');
+            $('.searchWrapper').css('visibility', 'visible');
         }
     });
 
@@ -141,6 +146,11 @@ $(document).ready(function ()
             $('.noResults').effect('shake', { times: 2 }, 500);
             $('.resultsTable tbody').empty();
             $('.noResults').show();
+
+            $('th').each( function ()
+            {
+                $('.resultsTable tbody').append('<td>N/A</td>');
+            });
         }
         else
         {

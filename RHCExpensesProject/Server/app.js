@@ -492,6 +492,7 @@ app.get('/main/vendors', (req, res) =>
         {
             if (err)
             {
+                logger.error('Error while navigating to vendors page:\n');
                 logger.error(err);
                 var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
                     + ' should this issue persist.';
@@ -519,6 +520,7 @@ app.get('/main/vendors/id/:vId/Name/:vName', (req, res) =>
         {
             if (err)
             {
+                logger.error('Searching items from vendor and navigating to items:\n' + req.params.vName);
                 logger.error(err);
                 var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
                     + ' should this issue persist.';
@@ -546,6 +548,7 @@ app.get('/main/vendors/search/?*', [body('query.search').trim().escape()], (req,
         {
             if (err)
             {
+                logger.error('Error when searching vendors:\n' + req.query);
                 logger.error(err);
                 res.send([]);
             }
@@ -569,6 +572,7 @@ app.get('/items/search/vendor/:vId', (req, res) =>
         {
             if (err)
             {
+                logger.error('Error when searching items by vendor:\n' + req.params.vName);
                 logger.error(err);
                 res.send([])
             }
@@ -673,14 +677,14 @@ app.get('/username=forgot', (req, res) =>
     res.render('forgot', { forgot: 'username' });
 });
 
-/**
- * 
- * 
- * Begin app.post
- * 
- * 
- * 
- */
+/************************************************************************************
+ ************************************************************************************ 
+ ************************************************************************************ 
+ ******************************* BEGIN APP.POSTS ************************************
+ ************************************************************************************
+ ************************************************************************************
+ ************************************************************************************
+ ************************************************************************************/
 
 app.post('/login', [body('username').trim().escape()], (req, res) =>
 {
@@ -690,6 +694,7 @@ app.post('/login', [body('username').trim().escape()], (req, res) =>
     {
         if (err)
         {
+            logger.error('Therer was an error attempting to login:\n' + req.body.username);
             logger.error(err);
             var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
                 + ' should this issue persist.';
@@ -862,6 +867,7 @@ app.post('/main/admin/addNewUser', (req, res) =>
     {
         if (err)
         {
+            logger.error('Therer was an error attempting to add new user:\n' + req.body);
             logger.error(err);
             var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
                 + ' should this issue persist.';
@@ -890,6 +896,7 @@ app.post('/main/addNewVendor', (req, res) =>
         {
             if (err)
             {
+                logger.error('Therer was an error attempting to add a new vendor:\n' + v);
                 logger.error(err);
                 var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
                     + ' should this issue persist.';
@@ -923,6 +930,7 @@ app.post('/main/addItem', (req, res) =>
         {
             if (err)
             {
+                logger.error('Therer was an error attempting to add an item:\n' + data);
                 logger.error(err);
                 var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
                     + ' should this issue persist.';
@@ -949,6 +957,7 @@ app.post('/pasword=forgot*', [body('username').trim().escape()], (req, res) =>
     {
         if (err)
         {
+            logger.error('Therer was an error attempting to send reset password email:\n' + userInfo);
             logger.error(err);
             var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
                 + ' should this issue persist.';
@@ -1006,6 +1015,7 @@ app.post('/resetPassword', (req, res) =>
                     {
                         if(err)
                         {
+                            logger.error('Therer was an error attempting to reset password:\n' + user.username);
                             logger.error(err);
                             var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
                                 + ' should this issue persist.';

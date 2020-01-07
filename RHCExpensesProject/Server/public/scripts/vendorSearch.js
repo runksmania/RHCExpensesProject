@@ -58,6 +58,11 @@ $(document).ready(function ()
             $('.noResults').effect('shake', { times: 2 }, 500);
             $('.resultsTable tbody').empty();
             $('.noResults').show();
+
+            $('th').each( function ()
+            {
+                $('.resultsTable tbody').append('<td>N/A</td>');
+            });
         }
         else
         {
@@ -79,8 +84,8 @@ $(document).ready(function ()
                     else if (property == 'vendor_name')
                     {
                         var name = searchResults[i][property];
-                        tableRowString += '<td><a href="' + window.location.origin + '/main/vendors?id=' + searchResults[i]['vendor_id']
-                            + '&name=' + name + '">' + name + '</a></td>';
+                        tableRowString += '<td><a href="' + window.location.origin + '/main/vendors/id/' + searchResults[i]['vendor_id']
+                            + '/name/' + name + '">' + name + '</a></td>';
                     }
                     else 
                     {

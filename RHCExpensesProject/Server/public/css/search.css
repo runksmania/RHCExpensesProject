@@ -3,6 +3,10 @@
     font-weight: bold;
 }
 
+.searchUi {
+    display: block ruby;
+}
+
 .searchUi .info{
     font-size: 15px;
     font-family: Arial, sans-serif;

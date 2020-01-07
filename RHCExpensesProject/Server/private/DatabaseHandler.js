@@ -233,55 +233,57 @@ module.exports = class DatabaseHandler
             switch (opts['narrow'])
             {
                 case '':
-                    queryString = 'SELECT v.vendor_id, vendor_name, vendor_address,\n'
+                    queryString = 'SELECT DISTINCT v.vendor_id, vendor_name, vendor_address,\n'
                         + 'vendor_city, vendor_state, vendor_zip, payment_terms\n'
                         + 'FROM vendor v, item i\n'
                         + 'WHERE v.vendor_name ILIKE $1\n'
                             + 'OR i.item_name ILIKE $1\n'
                             + 'OR v.vendor_city ILIKE $1\n'
                             + 'OR v.payment_terms ILIKE $1\n'
-                            + 'AND v.vendor_id = i.vendor_id;';
+                            + 'AND v.vendor_id = i.vendor_id\n';
                     break;
 
                 case '1':
                     queryString = 'SELECT v.vendor_id, vendor_name, vendor_address,\n'
                     + 'vendor_city, vendor_state, vendor_zip, payment_terms\n'
                     + 'FROM vendor v\n'
-                    + 'WHERE v.vendor_id = $1;';
+                    + 'WHERE v.vendor_id = $1\n';
 
                 case '2':
                     queryString = 'SELECT v.vendor_id, vendor_name, vendor_address,\n'
                         + 'vendor_city, vendor_state, vendor_zip, payment_terms\n'
                         + 'FROM vendor v\n'
-                        + 'WHERE v.vendor_name ILIKE $1;';
+                        + 'WHERE v.vendor_name ILIKE $1\n';
                     break;
                     
                 case '3':
-                    queryString = 'SELECT v.vendor_id, vendor_name, vendor_address,\n'
+                    queryString = 'SELECT DISTINCT v.vendor_id, vendor_name, vendor_address,\n'
                         + 'vendor_city, vendor_state, vendor_zip, payment_terms\n'
                         + 'FROM vendor v, item i\n'
                         + 'WHERE i.item_name ILIKE $1\n'
-                            + 'AND v.vendor_id = i.vendor_id;';
+                            + 'AND v.vendor_id = i.vendor_id\n';
                     break;
 
                 case '4':
                     queryString = 'SELECT v.vendor_id, vendor_name, vendor_address,\n'
                         + 'vendor_city, vendor_state, vendor_zip, payment_terms\n'
                         + 'FROM vendor v\n'
-                        + 'WHERE v.vendor_city ILIKE $1;'
+                        + 'WHERE v.vendor_city ILIKE $1\n'
                     break;       
                             
                 case '5':
                     queryString = 'SELECT v.vendor_id, vendor_name, vendor_address,\n'
                         + 'vendor_city, vendor_state, vendor_zip, payment_terms\n'
                         + 'FROM vendor v\n'
-                        + 'WHERE v.payment_terms ILIKE $1;'
+                        + 'WHERE v.payment_terms ILIKE $1\n'
                     break;
 
                 default:
                     return done(new Error('No determinable search parameters found.'), null);
                 
             }
+
+            queryString += 'ORDER BY vendor_name;'
 
             this.pool.query(queryString, ['%' + opts['search'] + '%'], function(err, res)
             {
@@ -290,7 +292,7 @@ module.exports = class DatabaseHandler
         }
         else
         {
-            this.pool.query('SELECT * FROM vendor;', function(err, res)
+            this.pool.query('SELECT * FROM vendor order by vendor_name;', function(err, res)
             {
                 return done(err, res);
             });
@@ -342,7 +344,7 @@ module.exports = class DatabaseHandler
                     //  in precise lookup.
                     if (nums[0] === nums[1])
                     {
-                        nums[1] = parseInt(nums[1]) + 1; 
+                        nums[1] = parseInt(nums[1]) + .99; 
                     }
 
                     queryString = 'SELECT item_num, item_name, item_desc, item_price,\n'
