@@ -6,6 +6,7 @@
     <link rel="stylesheet" type="text/css" href="/css/basicResultsTable.css" />
     <link rel="stylesheet" type="text/css" href="/css/search.css" />
     <link rel="stylesheet" type="text/css" href="/css/item.css" />
+    <link rel="stylesheet" type="text/css" href="/css/nav.css" />
     <link rel="shortcut icon" href="/graphics/favicon.png" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
@@ -13,6 +14,28 @@
     <script src="/scripts/itemSearch.js"></script>
 </head>
 <body>
+
+    <div class="admin-col-left">
+        <ul class="breadcrumb">
+            <li>
+                <a href="main">Main</a> <span class="divider">/</span>
+            </li>
+            <% if (vName != 'All') { %>
+                <li>
+                    <a href="/main/vendors">Vendors</a> <span class="divider">/</span>
+                </li>
+                <li class="active">
+                    <span><%= vName %> Items</span>
+                </li>
+            <% } else { %>
+                <li class="active">
+                    <span>Items</span>
+                </li>
+            <% } %>
+            <breadcrumb></breadcrumb>
+        </ul>
+    </div>
+
     <input class="vendorId" value="<%= vId %>" style="display: none;"/>
     <p class="invalidInput" style="opacity: 0;">Invalid input. Please type a valid number.</p>
     <p class="noResults" style="display:none">Nothing was found with those parameters. Please try again</p>

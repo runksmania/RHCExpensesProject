@@ -1,0 +1,24 @@
+.admin-col-left {
+    text-align: left;
+}
+
+.admin-col-left li {
+    list-style: none;
+    display: inline-block;
+}
+
+.admin-col-left span {
+    font-size: 15px;
+}
+
+.admin-col-left a {
+    text-decoration: none;
+    font-size: 15px;
+    line-height: 20px;
+    color: rgb(0, 118, 190);
+    font-weight: normal;
+}
+
+.admin-col-left a:hover {
+    color: red;
+}

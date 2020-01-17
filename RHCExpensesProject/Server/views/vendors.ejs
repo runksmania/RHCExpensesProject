@@ -5,6 +5,7 @@
     <link rel="stylesheet" type="text/css" href="/css/vendors.css" />
     <link rel="stylesheet" type="text/css" href="/css/basicResultsTable.css" />
     <link rel="stylesheet" type="text/css" href="/css/search.css" />
+    <link rel="stylesheet" type="text/css" href="/css/nav.css" />
     <link rel="shortcut icon" href="/graphics/favicon.png" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
@@ -13,11 +14,21 @@
 </head>
 <body>
 
+    <div class="admin-col-left">
+        <ul class="breadcrumb">
+            <li>
+                <a href="main">Main</a> <span class="divider">/</span>
+            </li>
+            <li class="active">
+                <span>Vendors</span>
+            </li>
+            <breadcrumb></breadcrumb>
+        </ul>
+    </div>
+
     <p class="noResults" style="display:none">Nothing was found with those parameters. Please try again</p>
 
     <div class="sidePanelWrapper">
-
-        <span class="tooltip" style="opacity: 0;">Search by Vendor Name, Item Name, City, or Payment Terms</span>
 
         <div class="contentWrapper">
 
@@ -35,9 +46,6 @@
                 <div class="searchWrapper">
                     <input class="searchField" type="search" placeholder="Search Vendors" name="search" />
                 </div>
-
-                <div class="info">?</div>
-
             </div>
 
             <div class="resultsTable">
@@ -53,19 +61,19 @@
                                     <th>State</th>
                                     <th>Zip Code</th>
                                     <th>Payment Terms</th>
+                                    <th></th>
                                 </tr>
                                 <tbody>
                                     <% for (var i = 0; i < vendors.length; i++) { %>
                                         <tr>
                                             <% for (var property in vendors[i]) { %>
-                                                <% if (property != 'vendor_id' && property != 'vendor_name') { %>
+                                                <% if (property != 'vendor_id') { %>
                                                     <td><input type="text" name="<%= property %>" value="<%= vendors[i][property] %>"/></td>
-                                                <% } else if (property == 'vendor_name') { %>
-                                                    <td><a href="/main/vendors/id/<%= vendors[i]['vendor_id'] %>/name/<%=vendors[i][property] %>"><%= vendors[i][property] %></a></td>
                                                 <% } else { %>
                                                     <td name="<%= property %>" style="display: none;"><%= vendors[i][property] %></td>
                                                 <% } %>
                                             <% } %>
+                                            <td><a href="/main/vendors/id/<%= vendors[i]['vendor_id'] %>/name/<%=vendors[i]['vendor_name'] %>">View Items</a></td>
                                         </tr>
                                     <% } %>
                                 </tbody>

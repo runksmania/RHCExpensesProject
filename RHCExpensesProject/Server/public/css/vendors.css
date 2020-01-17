@@ -6,7 +6,7 @@ body {
     transform: translate(-50%, -50%);
     box-sizing: border-box;
     padding: 70px;
-    background: url(../graphics/bioRadBackground.jpg) repeat-x #b8b6b7;
+    background: url(../graphics/Background.jpg) repeat-x #b8b6b7;
     font-family: Arial, sans-serif;
     text-align: center;
 }
