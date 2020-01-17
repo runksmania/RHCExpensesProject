@@ -344,7 +344,7 @@ module.exports = class DatabaseHandler
                     //  in precise lookup.
                     if (nums[0] === nums[1])
                     {
-                        nums[1] = parseInt(nums[1]) + .99; 
+                        nums[1] = Math.floor(parseInt(nums[1])) + 1; 
                     }
 
                     queryString = 'SELECT item_num, item_name, item_desc, item_price,\n'
@@ -352,6 +352,8 @@ module.exports = class DatabaseHandler
                         + 'FROM item\n'
                         + 'WHERE vendor_id = $1 AND\n'
                             + 'item_price BETWEEN ' + nums[0] + ' AND ' + nums[1] + ';';
+
+                    logger.debug(queryString);
                     break;
 
                 default:
@@ -377,9 +379,11 @@ module.exports = class DatabaseHandler
         }
         else
         {
-            this.pool.query('SELECT item_num, item_name, item_desc, item_price,\n'
+            this.pool.query('SELECT v.vendor_id, v.vendor_name, item_num, item_name, item_desc, item_price,\n'
                 + 'min_quan, max_quan\n'
-                + 'FROM item;', function(err, res)
+                + 'FROM item i, vendor v\n'
+                + 'WHERE i.vendor_id = v.vendor_id;',
+                function(err, res)
             {
                 return done(err, res);
             });
