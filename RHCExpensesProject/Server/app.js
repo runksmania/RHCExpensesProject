@@ -398,80 +398,6 @@ app.get('/main/searchRequests', (req, res) =>
     }
 });
 
-app.get('/main/searchRequests/?*', [body('query.search').trim().escape()], (req, res) =>
-{
-    if (req.session && req.session.user && req.session.user.resetPass != true)
-    {
-            logger.info(req.session.user.username + ' searches for requests matching: ' + req.query.search);
-
-        dbhandler.searchRequests(req.query.search, function (err, result)
-        {
-            if (err)
-            {
-                logger.error(err);
-                res.send(null);
-            }
-            else
-            {
-                if (result)
-                {
-
-
-                    for (var i = 0; i < result.length; i++)
-                    {
-                        //Remove parts of the result that won't go in the table, and the client doesn't need to see.
-                        delete result[i].idmaterial_request;
-                        delete result[i].requester_id;
-                        delete result[i].manager_id;
-                        delete result[i].planner_id;
-                        delete result[i].fulfiller_id;
-                        delete result[i].deleted;
-                        delete result[i].deleted_by;
-                        delete result[i].deleted_time;
-
-                        //Change value to string to render on table.
-                        if (result[i].thaw_required == 1)
-                        {
-                            result[i].thaw_required = 'Yes';
-                        }
-                        else
-                        {
-                            result[i].thaw_required = 'No';
-                        }
-
-                        //Change empty null values to N/A for better readability on table.
-                        for (var property in result[i])
-                        {
-                            if (result[i][property] == null || result[i][property] == '')
-                            {
-                                result[i][property] = 'N/A';
-                            }
-                        }
-                    }
-
-                }
-                else
-                {
-                    result = null;
-                }
-
-                res.send(result);
-            }
-
-        });
-
-        logger.debug(req.query.search);
-
-        res.send([]);
-    }
-    else
-    {
-        res.redirect('/');
-    }
-    
-
-});
-
 app.get('/main/addNewVendor', (req, res) =>
 {
     if (req.session && req.session.user && req.session.user.resetPass != true)
@@ -530,7 +456,6 @@ app.get('/main/items', (req, res) =>
             }
             else 
             {
-                logger.debug(result.rows);
                 res.render('items', {'vName' : 'All', 'vId' : '', 'items' : result.rows});
             }
         });
@@ -749,132 +674,6 @@ app.post('/login', [body('username').trim().escape()], (req, res) =>
 
 });
 
-app.post('/main/requestMaterials',
-    [
-        body('matId').escape(),
-        body('description').escape(),
-        body('comment').escape(),
-        body('quantity').escape(),
-        body('uom').escape(),
-        body('batchNum').escape(),
-        body('source').escape(),
-        body('destination').escape(),
-        body('transNum').escape(),
-        body('thawReq').escape(),
-        body('refreezeDate').escape(),
-        body('dateReq').escape()
-    ],
-    (req, res) =>
-    {
-
-        if (!req.session && !req.session.user)
-        {
-            res.redirect('/');
-        }
-
-        var matId = req.body.matId,
-            description = req.body.description,
-            comment = req.body.comment,
-            quantity = req.body.quantity,
-            uom = req.body.uom,
-            batchNum = req.body.batchNum,
-            source = req.body.source,
-            destination = req.body.destination,
-            transNum = req.body.transNum,
-            thawReq = req.body.thawReq,
-            refreezeDate = req.body.refreezeDate,
-            dateReq = req.body.dateReq,
-            requestor = req.session.user.name,
-            requestorId = req.session.user.id;
-
-        if (thawReq == null)
-        {
-            thawReq = '0';
-        }
-
-        dbhandler.requestMaterials(matId, description, comment, quantity, uom, batchNum, source, destination,
-            transNum, thawReq, refreezeDate, dateReq, requestor, requestorId, function (err, result)
-            {
-                if (err)
-                {
-                    logger.error(err);
-                    var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
-                        + ' should this issue persist.';
-                    req.flash('info', 'requestError');
-                    req.flash('requestError', flashMessage);
-                    res.redirect('/');
-                }
-                else
-                {
-                    req.flash('info', 'requestSuccess');
-                    req.flash('requestSuccess', 'Material request was successful');
-                    res.redirect('/');
-                }
-            });
-    });
-
-app.post('/main/alterRequests/?*',
-    [
-        body('form[1].value').trim().escape(),
-        body('form[2].value').trim().escape(),
-        body('form[3].value').trim().escape(),
-        body('form[4].value').trim().escape(),
-        body('form[5].value').trim().escape(),
-        body('form[6].value').trim().escape(),
-        body('form[7].value').trim().escape(),
-        body('form[8].value').trim().escape(),
-        body('form[9].value').trim().escape(),
-        body('form[10].value').trim().escape(),
-        body('form[11].value').trim().escape(),
-        body('form[12].value').trim().escape(),
-        body('form[13].value').trim().escape()
-    ],
-    (req, res) =>
-    {
-        logger.debug(req.body.form);
-
-        dbhandler.alterRequest(req.session.user.id, req.session.user.name, req.session.user.accessToken, req.body.form, function (err, result)
-        {
-            if (err)
-            {
-                logger.error(err);
-                var flashMessage = 'There was an error processing that request. Please try again or contact an administrator'
-                    + ' should this issue persist.';
-                req.flash('info', 'requestError');
-                req.flash('requestError', flashMessage);
-                res.redirect('/');
-            }
-            else
-            {
-                res.send(result);
-            }
-        });
-    });
-
-app.post('/main/reviewPendingRequests', (req, res) =>
-{
-    if (!req.session && !req.session.user)
-    {
-        res.redirect('/');
-    }
-});
-
-app.post('/main/recentRequests', (req, res) =>
-{
-    if (!req.session && !req.session.user)
-    {
-        res.redirect('/');
-    }
-});
-
-app.post('/main/searchRequests', (req, res) =>
-{
-    if (!req.session && !req.session.user)
-    {
-        res.redirect('/');
-    }
-});
-
 app.post('/main/admin/addNewUser', (req, res) =>
 {
     if (!req.session && !req.session.user && !req.session.user.accessToken < 2 && !req.session.user.accessToken >= 0)
@@ -1076,6 +875,42 @@ app.post('/resetPassword', (req, res) =>
     else
     {
         res.redirect('/');
+    }
+});
+
+/************************************************************************************
+ ************************************************************************************ 
+ ************************************************************************************ 
+ ******************************* BEGIN APP.PUTS *************************************
+ ************************************************************************************
+ ************************************************************************************
+ ************************************************************************************
+ ************************************************************************************/
+
+app.put('/items/update', (req, res) =>
+{
+    if (req.session && req.session.user && req.session.user.resetPass != true)
+    {
+        dbhandler.updateItems(req.body.data, function (err, result)
+        {
+            if (err)
+            {
+                logger.error('Error when searching items by vendor:\n' + req.params.vName);
+                logger.error(err);
+                res.send([])
+            }
+            else
+            {
+                logger.debug('return');
+                logger.debug(result);
+                res.send([]);
+                //res.send(result.rows);
+            }
+        });
+    }
+    else
+    {
+        res.send([]);
     }
 });
 

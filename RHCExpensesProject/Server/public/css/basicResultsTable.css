@@ -60,7 +60,7 @@ tbody tr:nth-child(even) {
     background-color: lightgrey;
 }
 
-input {
+input[type=text] {
     font: 400 13.3333px Arial;
     border: none;
     margin: 0;

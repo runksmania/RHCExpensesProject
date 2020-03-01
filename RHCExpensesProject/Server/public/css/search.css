@@ -56,3 +56,10 @@
 .searchField:focus{
     box-shadow: 0 0 6px rgba(81, 203, 238, 1);
 }
+
+input[type=button] {
+    color:white;
+    background:#3c3;
+    padding: 5px 20px;
+    margin-left: 10px;
+}

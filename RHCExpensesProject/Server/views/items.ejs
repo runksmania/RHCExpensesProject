@@ -11,7 +11,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
     <script src="/scripts/addNewUser.js"></script>
-    <script src="/scripts/itemSearch.js"></script>
+    <script src="/scripts/items.js"></script>
 </head>
 <body>
 
@@ -63,7 +63,7 @@
                     <input class="minRange" type="text" placeholder="Min Range" style="display: none;">
                     <input class="maxRange" type="text" placeholder="Max Range" style="display: none;">
                 </div>
-
+                <input type="button" value="Save" id="saveBtn"/>
             </div>
 
             <% if (vName != 'All') { %>
@@ -105,7 +105,6 @@
                 <div class="itemsView">
                     <div class="resultsTable">
                         <div class="content">
-                        
                             <form>
                                 <table cellpadding="0" cellspacing="0">
                                     <thead>
@@ -135,7 +134,6 @@
                                     </thead>
                                 </table>
                             </form>
-
                         </div>
                     </div>
                 </div>

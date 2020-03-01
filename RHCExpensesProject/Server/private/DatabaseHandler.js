@@ -390,226 +390,37 @@ module.exports = class DatabaseHandler
         }
     }
 
-    //This function inserts a new material request into the database.
-    requestMaterials(matId, description, comment, quantity, uom, batchNum, source, destination, transNum,
-        thawReq, refreezeDate, dateReq, requester, requsterId, done)
+    //This functions updates all items from the give array.
+    updateItems(itemsData, done)
     {
-        //Set up parameterized material query.
-        var materialQueryString = 'INSERT INTO material_request '
-            + '(material_number, description, comment, quantity_required,'
-            + 'uom, batch_number, source_location, destination_location, transaction_number,'
-            + 'thaw_required, refreeze_date, date_required, requester, requester_id)\n'
-            + 'VALUES\n'
-            + '(?,?,?,?,?,?,?,?,?,?,?,?,?,?);';
 
-            var materialQuery = this.pool.query(materialQueryString, [matId, description, comment, quantity, uom, batchNum,
-                source, destination, transNum, thawReq, refreezeDate, dateReq, requester, requsterId], function (err, res)
-                {
-                    if (err)
-                    {
-                        return done(err, null);
-                    }
-                    else if (res)
-                    {
-                        //I cant figure out how to create a material request and put it into the history table.
-                        /*function createMaterialHistory(matId, description, comment, quantity, uom, batchNum, source, destination, transNum,
-                            thawReq, refreezeDate, dateReq, requester, requsterId)
-                        {
-
-                            //Set up parameterized history query.
-                            var historyQueryString = 'INSERT INTO material_request_history '
-                                + '(idmaterial_request, material_number, description, comment, quantity_required,'
-                                + 'uom, batch_number, source_location, destination_location, transaction_number,'
-                                + 'thaw_required, refreeze_date, date_required, requester, requester_id)\n'
-                                + 'VALUES\n'
-                                + '(SELECT LAST_INSERTED_ID(),?,?,?,?,?,?,?,?,?,?,?,?,?)';
-
-                            var historyQuery = this.pool.query(historyQueryString, [matId, description, comment, quantity, uom, batchNum,
-                                source, destination, transNum, thawReq, refreezeDate, dateReq, requester, requsterId], function (error, result)
-                                {
-                                    return done(error, result);
-                                });
-
-                        }*/
-
-                        return done(null, res);
-                    }
-                });
-    }
-
-    //This function returns all pending material requests from the database.
-    viewPendingRequests(requesterId, done)
-    {
-        //Set up parameterized query.
-        var queryString = 'SELECT * FROM material_request WHERE requester_id = ? AND '
-            + '(manager_id IS NULL OR planner_id IS NULL OR fulfiller_id IS NULL) AND deleted IS NULL;';
-
-        var query = this.pool.query(queryString, [requesterId], function (err, result)
+        for (var i in itemsData)
         {
-            return done(err, result);
-        });
-    }
+            var queryString = 'UPDATE item\n'
+                + 'SET item_name = $2, item_desc = $3, item_price = $4, min_quan = $5, max_quan = $6\n'
+                + 'WHERE item_num = $1;'
+            
+            itemsData[i][0] = parseInt(itemsData[i][0])
+            itemsData[i][3] = parseFloat(itemsData[i][3])
+            itemsData[i][4] = parseInt(itemsData[i][4])
+            itemsData[i][5] = parseInt(itemsData[i][5])
+            logger.debug(itemsData[i]);
 
-    //This function updates material requests in the database, and adds the augmenter as having accepted the request.
-    //The augmenter accepts it in the appropriate field based on their accessToken.
-    //2 manager, 3 planner, 4 fulfiller.
-    alterRequest(requesterId, requester, accessToken, data, done)
-    {
-        //Set up parameterized query and array for the loop.
-        var updateQueryString = 'UPDATE material_request SET ';
-        var parameterizedData = []
-
-        for (var num in data)
-        {
-            var name = data[num].name;
-            var value = data[num].value;
-
-            if (name != 'idmaterial_request')
+            this.pool.query(queryString, itemsData, function(err, res)
             {
-                //Add all properties to the query and their values to the parameter array.
-                updateQueryString += name + ' = ?, ';
-                parameterizedData.push(value);
-            }
-        }
-
-        //Add accepting lines based on accessToken.
-        //Try switch case here.
-        switch (accessToken)
-        {
-            case '0':
-            //Intentionally left empty.
-
-            case '1':
-            //Intentionally left empty.
-
-            case '2':
-
-                //Manager query line.
-                updateQueryString += 'approving_manager = ?, manager_id = ?, manager_approved_time = NOW(), ';
-                parameterizedData.push(requester);
-                parameterizedData.push(requesterId);
-
-                if (accessToken == 2)
+                if(err)
                 {
-                    break;
+                    return done(err,res)
                 }
-
-            case '3':
-
-                //Planning employee query line.
-                updateQueryString += 'approving_planner = ?, planner_id = ?, planning_approved_time = NOW(), ';
-                parameterizedData.push(requester);
-                parameterizedData.push(requesterId);
-
-                if (accessToken == 3)
-                {
-                    break;
-                }
-
-            case '4':
-
-                //Fulfiller employee query line.
-                updateQueryString += 'fulfiller = ?, fulfiller_id = ?, fulfilled_time = NOW(), ';
-                parameterizedData.push(requester);
-                parameterizedData.push(requesterId);
-
-                break;
-        }
-
-        //Add altered by lines and push into parameters requester name.
-        updateQueryString += ' altered_by = ?, alter_time = NOW() ';
-        parameterizedData.push(requesterId);
-
-        updateQueryString += 'WHERE idmaterial_request = ?'; // Add SELECT * WHERE idmaterial_request = ?;' here when i figure out how to do it properly.
-        parameterizedData.push(data[0].value);
-        //parameterizedData.push(data[0].value);
-
-        var updateQuery = this.pool.query(updateQueryString, parameterizedData, function (err, result)
-        {
-            if (err)
-            {
-                return done(err, null);
-            }
-            else
-            {
-                //Update was successful, now return the result.
-                return done(null, result)
-            }
-        });
-    }
-
-    //This method pseudo deletes a material request.
-    pseudoDeleteRequest(matRequestId, requester)
-    {
-        //Set deleted = 1, this allows us to filter out these results from future queries.
-        var queryString = 'UPDATE material_request SET deleted = 1, deleted_by = ?, deleted_time = NOW() WHERE idmaterial_request = ?'
-
-        var query = this.pool.query(queryString, [matRequestId, requester], function (err, result)
-        {
-            return done(err, result);
-        });
-    }
-
-    //Deletes the requested material
-    actualDeleteRequest(matRequestId, allBool)
-    {
-        if (allBool == true)
-        {
-            //If user calling function wants all pseudo deletes to become permanent.
-            var queryString = 'DELETE FROM material_request WHERE deleted = 1';
-
-            var query = this.pool.query(queryString, function (err, result)
-            {
-                return done(err, result);
             });
         }
-        else
-        {
-            //Permanently delete a single material request marked as deleted. 
-            var queryString = 'DELETE FROM material_request WHERE idmaterial_request = ? AND deleted = 1';
 
-            var query = this.pool.query(queryString, [matRequestId], function (err, result)
+        this.pool.query('SELECT v.vendor_id, v.vendor_name, item_num, item_name, item_desc, item_price,\n'
+                + 'min_quan, max_quan\n'
+                + 'FROM item i;',
+                function(err, res)
             {
-                return done(err, result);
+                return done(err, res);
             });
-        }
-    }
-
-    //This function searches for requests made within the last week and returns results found.
-    viewRecentRequests(done)
-    {
-        //Set up parameterized query.
-        var queryString = 'SELECT * FROM material_request\n'
-            + 'WHERE requested_time >= CURDATE() - INTERVAL 7 DAY\n'
-            + 'AND requested_time < CURDATE() + INTERVAL 1 DAY AND deleted IS NULL;';
-
-        var query = this.pool.query(queryString, function (err, result)
-        {
-            return done(err, result);
-        });
-    }
-
-    //This function searches for requests meeting users search input and returns results found.
-    searchRequests(searchRequest, done)
-    {
-        //Set up parameterized query.
-        var queryString = 'SELECT * FROM material_request WHERE material_number LIKE ? OR transaction_number LIKE ? '
-            + 'OR source_location LIKE ? OR destination_location LIKE ? OR requester LIKE ? OR approving_manager LIKE ? '
-            + 'OR approving_planner LIKE ? OR fulfiller LIKE ? AND deleted IS NULL;'
-        var sr = '%' + searchRequest + '%';
-
-        var query = this.pool.query(queryString, [sr, sr, sr, sr, sr, sr, sr, sr], function (err, result)
-        {
-            if (err)
-            {
-                return done(err, null);
-            }
-            else if (result.length < 1)
-            {
-                return done(err, null);
-            }
-
-            return done(err, result);
-        });
     }
 }

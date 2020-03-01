@@ -184,4 +184,41 @@ $(document).ready(function ()
         }
         
     }
+
+    $('#saveBtn').click(function()
+    {
+        var toSave = []
+
+        $('tbody tr').each(function(row)
+        {
+            $(this).find('td').each(function(col, td)
+            {
+                if (!toSave[row])
+                {
+                    toSave.push([])
+                }
+
+                if ($(td).find('input').length && col != 1 && col != 2)
+                {
+                    toSave[row].push($(td).find('input').val())
+                }
+                else if (col != 1 && col != 2)
+                {
+                    toSave[row].push($(td).text())
+                }
+            });
+        });
+
+        var urlString = window.location.origin + '/items/update';
+
+        $.ajax({
+            method: "put",
+            url: urlString,
+            data: { data: toSave }
+        })
+            .done(function (result)
+            {
+                updateTable(result);
+            });
+    });
 });
