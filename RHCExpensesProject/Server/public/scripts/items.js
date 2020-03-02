@@ -164,7 +164,16 @@ $(document).ready(function ()
                 
                 for (var property in searchResults[i])
                 {
-                    if (property != 'item_num')
+                    if (property == 'vendor_id')
+                    {
+                        tableRowString += '<td style="display: none;">' + searchResults[i][property] + '</td>';
+                    }
+                    else if (property == 'vendor_name')
+                    {
+                        tableRowString += '<td><a href="/main/vendors/id/' + searchResults[i]['vendor_id'] 
+                            + '/name/' + searchResults[i][property] + '">' + searchResults[i][property] + '</a></td>'
+                    }
+                    else if (property != 'item_num')
                     {
                         tableRowString += '<td>' + '<input type="text" name="' + property + '" value="'
                             + searchResults[i][property] + '"></td>\n';
@@ -202,7 +211,7 @@ $(document).ready(function ()
                 {
                     toSave[row].push($(td).find('input').val())
                 }
-                else if (col != 1 && col != 2)
+                else if (col != 0 && col != 1)
                 {
                     toSave[row].push($(td).text())
                 }

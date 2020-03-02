@@ -901,10 +901,7 @@ app.put('/items/update', (req, res) =>
             }
             else
             {
-                logger.debug('return');
-                logger.debug(result);
-                res.send([]);
-                //res.send(result.rows);
+                res.send(result.rows);
             }
         });
     }
@@ -921,5 +918,6 @@ app.use((req, res) =>
 
 app.listen(constants.port, constants.host, () =>
 {
+    logger.info('Connected to database successfully.');
     logger.info('Server is now listening on: ' + constants.host + ':' + constants.port);
 });

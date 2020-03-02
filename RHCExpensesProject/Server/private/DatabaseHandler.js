@@ -28,10 +28,6 @@ module.exports = class DatabaseHandler
             {
                 logger.error(err);
             }
-            else
-            {
-                logger.info('Connected to database successfully.');
-            }
 
         });
     }
@@ -393,34 +389,48 @@ module.exports = class DatabaseHandler
     //This functions updates all items from the give array.
     updateItems(itemsData, done)
     {
-
-        for (var i in itemsData)
+        var promises = itemsData.map(function(row)
         {
+            var tempDbhandler = new DatabaseHandler()
             var queryString = 'UPDATE item\n'
                 + 'SET item_name = $2, item_desc = $3, item_price = $4, min_quan = $5, max_quan = $6\n'
                 + 'WHERE item_num = $1;'
             
-            itemsData[i][0] = parseInt(itemsData[i][0])
-            itemsData[i][3] = parseFloat(itemsData[i][3])
-            itemsData[i][4] = parseInt(itemsData[i][4])
-            itemsData[i][5] = parseInt(itemsData[i][5])
-            logger.debug(itemsData[i]);
+            row[0] = parseInt(row[0])
+            row[3] = parseFloat(row[3])
+            row[4] = parseInt(row[4])
+            row[5] = parseInt(row[5])
 
-            this.pool.query(queryString, itemsData, function(err, res)
+            tempDbhandler.pool.query(queryString, row, function(err, res)
             {
                 if(err)
                 {
                     return done(err,res)
                 }
+                else
+                {
+                    logger.info('Updated items table: ');
+                    logger.info(queryString);
+                    logger.info(row);
+                    return done(err, res);
+                }
             });
-        }
+        });
 
-        this.pool.query('SELECT v.vendor_id, v.vendor_name, item_num, item_name, item_desc, item_price,\n'
-                + 'min_quan, max_quan\n'
-                + 'FROM item i;',
-                function(err, res)
+        Promise.all(promises).then(function()
             {
-                return done(err, res);
-            });
+                var tempDbhandler = new DatabaseHandler();
+                tempDbhandler.pool.query('SELECT v.vendor_id, v.vendor_name, item_num, item_name, item_desc, item_price,\n'
+                    + 'min_quan, max_quan\n'
+                    + 'FROM item i, vendor v\n'
+                    + 'WHERE i.vendor_id = v.vendor_id;',
+                function(err, res)
+                {
+                    logger.info('Grabbed data from table:')
+                    logger.info(res.rows);
+                    return done(err, res);
+                });
+            }
+        );
     }
 }
